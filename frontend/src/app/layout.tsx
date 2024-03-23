@@ -1,11 +1,12 @@
 import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
-import { Metadata } from "next"
+import { Metadata } from "next";
 import { ReactNode } from "react";
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: {
@@ -20,19 +21,18 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-}
+};
 
 interface RootLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
-
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body>
+        <body className={cn(inter.variable)}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -44,5 +44,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </body>
       </html>
     </>
-  )
+  );
 }

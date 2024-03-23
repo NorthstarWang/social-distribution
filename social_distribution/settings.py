@@ -3,7 +3,7 @@ import dj_database_url
 from pathlib import Path
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Set to 'True' for development
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'  # Set to 'True' for development
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATICFILES_DIRS = [

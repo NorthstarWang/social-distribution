@@ -22,7 +22,7 @@ export default function Home() {
     <main className="flex flex-col">
       <div className="bg-background">
         <CustomResizable>
-          <div className="col-span-3 md:col-span-4 md:border-l">
+          <div className="col-span-3 md:col-span-4">
             <div className="h-full px-4 py-6 md:px-8">
               <Tabs defaultValue="post" className="h-full space-y-6">
                 <div className="space-between flex items-center">

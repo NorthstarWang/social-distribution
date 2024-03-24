@@ -34,14 +34,14 @@ export default function CustomResizable({
     function handleResize() {
       const width = window.innerWidth;
 
-      const sizeBreakpoints = {
-        md: 768,
-        lg: 1024,
-        xl: 1280,
-      };
-
-      if (width >= sizeBreakpoints.lg) {
-        setPanelSize({ defaultSize: 20, minSize: 18 });
+      if (width >= 2560) {
+        setPanelSize({ defaultSize: 15, minSize: 10 });
+      } else if (width >= 1920) {
+        setPanelSize({ defaultSize: 17, minSize: 12 });
+      } else if (width >= 1536) {
+        setPanelSize({ defaultSize: 19, minSize: 14 });
+      }else if (width >= 1024) {
+        setPanelSize({ defaultSize: 25, minSize: 20 });
       } else {
         setPanelSize({ defaultSize: 30, minSize: 25 });
       }

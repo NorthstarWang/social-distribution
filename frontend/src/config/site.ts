@@ -12,6 +12,7 @@ export const siteConfig = {
     {
       title: "Inbox",
       href: "/inbox",
+      requireAuth: true,
     },
   ],
   links: {

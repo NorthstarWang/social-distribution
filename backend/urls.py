@@ -34,15 +34,4 @@ urlpatterns = [
     # View
     # index view
     path('', views.index),
-    # auth view
-    path('login/', views.login_view, name='login'),
-    path('register/', views.register_view, name='register'),
-    # post view
-    path('create_post/', views.create_post_view, name='create_post'),
-    # profile view
-    path('profile/<str:author_id>/', views.profile_view, name='profile'),
-    # settings view
-    path('settings/', views.settings_view, name='settings'),
-    # post management view
-    path('manage_posts/', views.manage_posts_view, name='manage_posts'),
 ]

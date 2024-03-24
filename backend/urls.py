@@ -1,6 +1,6 @@
 from django.urls import path
 from backend.api import *
-import views
+import backend.views as views
 
 urlpatterns = [
     # API

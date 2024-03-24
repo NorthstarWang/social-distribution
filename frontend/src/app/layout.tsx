@@ -43,9 +43,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             enableSystem
             disableTransitionOnChange
           >
-            <div className="relative flex min-h-screen flex-col overflow-auto">
+            <div className="relative flex min-h-screen flex-col overflow-hidden">
               <SiteHeader />
-              <div className="flex-1">{children}</div>
+              <div className="flex-1 overflow-auto h-[calc(100vh-4.125rem)]">{children}</div>
             </div>
           </ThemeProvider>
         </body>

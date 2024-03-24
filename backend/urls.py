@@ -24,12 +24,6 @@ urlpatterns = [
     path('service/authors/<str:author_id>/liked/', author_liked, name='author_liked'),
     # inbox api
     path('service/authors/<str:author_id>/inbox/', author_inbox, name='author_inbox'),
-    # friend api
-    path('service/authors/<str:author_id>/friends/', friends, name='friends'),
-    path('service/authors/<str:author_id>/friends/<str:friend_id>/', friend, name='friend'),
-    path('service/authors/<str:author_id>/friendrequests/', friend_requests, name='friend_requests'),
-    path('service/authors/<str:author_id>/friendrequests/<str:foreign_author_id>/', friend_request,
-         name='friend_request'),
 
     # View
     # index view

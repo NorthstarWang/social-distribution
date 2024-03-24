@@ -94,23 +94,6 @@ class Image(models.Model):
     comment = models.ForeignKey(Comment, related_name='images', null=True, blank=True, on_delete=models.CASCADE)
 
 
-class Friend(models.Model):
-    sender = models.ForeignKey(Author, related_name='friend_requests_sent', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(Author, related_name='friend_requests_received', on_delete=models.CASCADE)
-    accepted = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('sender', 'receiver')
-
-    def as_json(self):
-        return {
-            "type": "friend",
-            "actor": self.sender.as_json(),
-            "object": self.receiver.as_json()
-        }
-
-
 class Follow(models.Model):
     follower = models.ForeignKey(Author, related_name='following', on_delete=models.CASCADE)
     following = models.ForeignKey(Author, related_name='followers', on_delete=models.CASCADE)

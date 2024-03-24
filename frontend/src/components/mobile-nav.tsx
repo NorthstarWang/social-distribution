@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { NavItem } from "@/types/nav";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
@@ -78,6 +79,29 @@ export function MobileNav() {
                   </MobileLink>
                 )
             )}
+          </div>
+          <div className="flex flex-col space-y-2">
+            {siteConfig.sidebarNav.map((item, index) => !item.requireAuth && (
+              <div key={index} className="flex flex-col space-y-3 pt-6">
+                <h4 className="font-medium">{item.title}</h4>
+                {item?.items?.length &&
+                  item.items.map((item: NavItem) => (!item.requireAuth &&
+                    <React.Fragment key={item.href}>
+                      {(item.href ? (
+                          <MobileLink
+                            href={item.href}
+                            onOpenChange={setOpen}
+                            className="text-muted-foreground"
+                          >
+                            {item.title}
+                          </MobileLink>
+                        ) : (
+                          item.title
+                        ))}
+                    </React.Fragment>
+                  ))}
+              </div>
+            ))}
           </div>
         </ScrollArea>
       </SheetContent>

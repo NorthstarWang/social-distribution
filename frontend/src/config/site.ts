@@ -6,8 +6,15 @@ export const siteConfig = {
     "Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
   mainNav: [
     {
-      title: "Social",
+      title: "Explore",
       href: "/",
     },
-  ]
+    {
+      title: "Inbox",
+      href: "/inbox",
+    },
+  ],
+  links: {
+    github: "https://github.com/NorthstarWang/social-distribution"
+  },
 }

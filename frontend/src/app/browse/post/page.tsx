@@ -1,17 +1,17 @@
 "use client";
 import { InfiniteScrollPost } from '@/components/post/infinite-scroll-post';
 import { Post } from '@/types/post';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     const newPosts: Post[] = await fetchMorePosts(posts.length / 4 + 1);
     setPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setHasMore(newPosts.length > 0);
-  };
+  }, [posts.length]);
 
   useEffect(() => {
     fetchPosts();

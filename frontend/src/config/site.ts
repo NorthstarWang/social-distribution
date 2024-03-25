@@ -31,7 +31,7 @@ export const siteConfig = {
         },
         {
           title: "Author",
-          href: "/browse/author",
+          href: "/browse/post",
           items: [],
         },
       ],

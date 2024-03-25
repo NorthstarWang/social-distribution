@@ -97,7 +97,7 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-center space-x-4">
-                      <Link href="/browse/author">
+                      <Link href="/browse/post">
                         <Button className="btn btn-primary">View More</Button>
                       </Link>
                     </div>
@@ -120,7 +120,7 @@ export default function Home() {
                       </p>
                     </div>
                     <div className="flex items-center space-x-4">
-                      <Link href="/browse/author">
+                      <Link href="/browse/post">
                         <Button className="btn btn-primary">View More</Button>
                       </Link>
                     </div>

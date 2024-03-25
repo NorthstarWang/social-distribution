@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic import TemplateView
+
 from backend.api import *
-import backend.views as views
 
 urlpatterns = [
     # API
@@ -24,8 +25,4 @@ urlpatterns = [
     path('service/authors/<str:author_id>/liked/', author_liked, name='author_liked'),
     # inbox api
     path('service/authors/<str:author_id>/inbox/', author_inbox, name='author_inbox'),
-
-    # View
-    # index view
-    path('', views.index),
 ]

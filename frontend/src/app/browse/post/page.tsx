@@ -3,7 +3,7 @@ import { InfiniteScrollPost } from '@/components/post/infinite-scroll-post';
 import { Post } from '@/types/post';
 import React, { useEffect, useState } from 'react';
 
-const page = () => {
+const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
@@ -57,4 +57,4 @@ const page = () => {
   );
 }
 
-export default page
+export default BrowsePost

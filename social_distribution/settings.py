@@ -8,17 +8,19 @@ SERVE_FRONTEND = os.environ.get('SERVE_FRONTEND', 'False') == 'True'  # Set to '
 LOCAL = os.environ.get('DJANGO_LOCAL', 'False') == 'True'  # Set to 'True' for local development
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/out/_next/static'),
 ] if not SERVE_FRONTEND else []
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%'
 
 if SERVE_FRONTEND:
     ALLOWED_HOSTS = ['*']
 else:
-    # Replace 'your-production-domain.com' with your actual domain
-    # and add any other domain or subdomain your app is using
     ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -39,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'social_distribution.urls'
@@ -102,8 +105,4 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-STATIC_URL = 'static/'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

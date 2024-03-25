@@ -22,7 +22,7 @@ const page = () => {
       setTimeout(() => {
         const newPosts: Post[] = [];
         for (let i = 0; i < 4; i++) {
-          const uniqueId = (page - 1) * 4 + i;
+          const uniqueId = `post-${new Date().getTime()}-${Math.floor(Math.random() * 10000)}`;
           newPosts.push({
             id: `post-${uniqueId}`,
             title: `Post ${uniqueId}`,

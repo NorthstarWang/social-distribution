@@ -6,6 +6,8 @@ import { ReactNode } from "react";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";
+import { Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -43,10 +45,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
             enableSystem
             disableTransitionOnChange
           >
+            <Theme>
             <div className="relative flex min-h-screen flex-col overflow-hidden">
               <SiteHeader />
-              <div className="flex-1 overflow-auto h-[calc(100vh-4.125rem)]">{children}</div>
+              <div className="flex-1 overflow-hidden h-[calc(100vh-4.125rem)]">{children}</div>
             </div>
+            </Theme>
           </ThemeProvider>
         </body>
       </html>

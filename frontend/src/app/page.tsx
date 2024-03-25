@@ -1,16 +1,12 @@
 import { Metadata } from "next";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Sidebar } from "@/components/sidebar";
 import CustomResizable from "@/components/custom-resizable";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Discover",
@@ -49,6 +45,11 @@ export default function Home() {
                         Most popular in the community.
                       </p>
                     </div>
+                    <div className="flex items-center space-x-4">
+                      <Link href="/browse/post">
+                        <Button className="btn btn-primary">View More</Button>
+                      </Link>
+                    </div>
                   </div>
                   <Separator className="my-4" />
                   <div className="relative">
@@ -57,13 +58,20 @@ export default function Home() {
                       <ScrollBar orientation="horizontal" />
                     </ScrollArea>
                   </div>
-                  <div className="mt-6 space-y-1">
-                    <h2 className="text-2xl font-semibold tracking-tight">
-                      Fresh Update
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      Most recent delivery, still hot.
-                    </p>
+                  <div className="flex items-center mt-6 justify-between">
+                    <div className="space-y-1">
+                      <h2 className="text-2xl font-semibold tracking-tight">
+                        Fresh Update
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Most recent delivery, still hot.
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Link href="/browse/post">
+                        <Button className="btn btn-primary">View More</Button>
+                      </Link>
+                    </div>
                   </div>
                   <Separator className="my-4" />
                   <div className="relative">
@@ -87,6 +95,12 @@ export default function Home() {
                         followers.
                       </p>
                     </div>
+
+                    <div className="flex items-center space-x-4">
+                      <Link href="/browse/author">
+                        <Button className="btn btn-primary">View More</Button>
+                      </Link>
+                    </div>
                   </div>
                   <Separator className="my-4" />
                   <div className="relative">
@@ -95,14 +109,21 @@ export default function Home() {
                       <ScrollBar orientation="horizontal" />
                     </ScrollArea>
                   </div>
-                  <div className="mt-6 space-y-1">
-                    <h2 className="text-2xl font-semibold tracking-tight">
-                      Most Liked Authors
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      Most popular authors in the community with most liked on
-                      their posts.
-                    </p>
+                  <div className="flex items-center mt-6 justify-between">
+                    <div className="space-y-1">
+                      <h2 className="text-2xl font-semibold tracking-tight">
+                        Most Liked Authors
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        Most popular authors in the community with most liked on
+                        their posts.
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Link href="/browse/author">
+                        <Button className="btn btn-primary">View More</Button>
+                      </Link>
+                    </div>
                   </div>
                   <Separator className="my-4" />
                   <div className="relative">

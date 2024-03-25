@@ -40,7 +40,7 @@ export default function CustomResizable({
         setPanelSize({ defaultSize: 17, minSize: 12 });
       } else if (width >= 1536) {
         setPanelSize({ defaultSize: 19, minSize: 14 });
-      }else if (width >= 1024) {
+      } else if (width >= 1024) {
         setPanelSize({ defaultSize: 25, minSize: 20 });
       } else {
         setPanelSize({ defaultSize: 30, minSize: 25 });
@@ -58,12 +58,16 @@ export default function CustomResizable({
         collapsible
         minSize={panelSize.minSize}
         defaultSize={panelSize.defaultSize}
+        maxSize={40}
         className="hidden md:block h-[calc(100vh-4.125rem)]"
       >
         <Sidebar className="hidden md:block" />
       </ResizablePanel>
       <ResizableHandle withHandle className="hidden md:flex" />
-      <ResizablePanel defaultSize={100 - panelSize.defaultSize}>
+      <ResizablePanel
+        className="h-[calc(100vh-4.125rem)]"
+        defaultSize={100 - panelSize.defaultSize}
+      >
         {children}
       </ResizablePanel>
     </ResizablePanelGroup>

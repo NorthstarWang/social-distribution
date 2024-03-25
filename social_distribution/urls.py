@@ -9,7 +9,7 @@ urlpatterns = [
     path('', include('backend.urls')),
 ]
 
-if not settings.DEBUG:
+if not settings.SERVE_FRONTEND:
     urlpatterns += [
         re_path(r'^_next/static/(?P<path>.*)$', serve, {
             'document_root': os.path.join(settings.BASE_DIR, 'frontend/out/_next/static'),

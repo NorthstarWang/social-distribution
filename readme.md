@@ -9,7 +9,7 @@ Ensure you have the following installed:
 - Node.js 18.17.0
 - PostgreSQL
 
-## Backend Setup
+## Backend Local Setup
 
 1. Activate the virtual environment:
 
@@ -27,10 +27,12 @@ Ensure you have the following installed:
 3. Create a `.env.local` file at the root of the backend project with the following content:
 
    ```bash
-   DJANGO_DEBUG=True
+   SERVE_FRONTEND=False
+   DJANGO_LOCAL=True
    ```
 
-4. Configure your PostgreSQL database in `social_distribution/settings.py`. Replace the debug database settings with your local PostgreSQL credentials.
+4. Configure your PostgreSQL database in `social_distribution/settings.py`. Replace the debug database settings with
+   your local PostgreSQL credentials.
 
 5. Migrate the database to create the necessary tables:
 
@@ -49,6 +51,9 @@ Ensure you have the following installed:
    ```bash
    python manage.py runserver
    ```
+
+**Note:** To access the Django admin interface, ensure you append a trailing slash to the URL (
+e.g., http://localhost:8000/admin/), http://localhost:8000/admin will not work due to front end app routing.
 
 ## Frontend Setup
 
@@ -76,4 +81,5 @@ Ensure you have the following installed:
    npm run dev
    ```
 
-Now, you should have both the backend and frontend running locally for development. The backend will be available at `http://localhost:8000`, and the frontend will be accessible at `http://localhost:3000`.
+Now, you should have both the backend and frontend running locally for development. The backend will be available
+at `http://localhost:8000`, and the frontend will be accessible at `http://localhost:3000`.

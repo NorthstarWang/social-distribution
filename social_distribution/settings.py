@@ -2,17 +2,19 @@ import os
 import dj_database_url
 from pathlib import Path
 
+DEBUG = True
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'  # Set to 'True' for development
+SERVE_FRONTEND = os.environ.get('DJANGO_DEBUG', 'False') == 'True'  # Set to 'True' for development
+LOCAL = os.environ.get('DJANGO_LOCAL', 'False') == 'True'  # Set to 'True' for local development
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/out/_next/static'),
-] if not DEBUG else []
+] if not SERVE_FRONTEND else []
 
 SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%'
 
-if DEBUG:
+if SERVE_FRONTEND:
     ALLOWED_HOSTS = ['*']
 else:
     # Replace 'your-production-domain.com' with your actual domain
@@ -44,7 +46,7 @@ ROOT_URLCONF = 'social_distribution.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'frontend/out')] if not DEBUG else [],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/out')] if not SERVE_FRONTEND else [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,7 +61,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'social_distribution.wsgi.application'
 
-if DEBUG:
+if LOCAL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',

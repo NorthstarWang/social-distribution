@@ -7,6 +7,6 @@ from django.conf import settings
 
 
 def index(request):
-    if settings.DEBUG:
+    if settings.SERVE_FRONTEND:
         return JsonResponse({'message': 'Debug mode is ON'})
     return render(request, 'index.html')

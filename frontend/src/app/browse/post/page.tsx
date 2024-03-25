@@ -15,7 +15,7 @@ const BrowsePost = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [fetchPosts]);
 
   async function fetchMorePosts(page: number): Promise<Post[]> {
     return new Promise((resolve) => {

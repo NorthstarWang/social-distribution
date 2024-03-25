@@ -45,6 +45,7 @@ export function PostCard({ className, post, ...props }: CardProps) {
   const author: Author = post.author;
 
   useLayoutEffect(() => {
+    const currentContentRef = contentRef.current;
     const resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const { height } = entry.contentRect;
@@ -52,13 +53,13 @@ export function PostCard({ className, post, ...props }: CardProps) {
       }
     });
 
-    if (contentRef.current) {
-      resizeObserver.observe(contentRef.current);
+    if (currentContentRef) {
+      resizeObserver.observe(currentContentRef);
     }
 
     return () => {
-      if (contentRef.current) {
-        resizeObserver.unobserve(contentRef.current);
+      if (currentContentRef) {
+        resizeObserver.unobserve(currentContentRef);
       }
     };
   }, []);

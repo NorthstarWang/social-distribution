@@ -34,4 +34,6 @@ urlpatterns = [
     # View
     # index view
     path('', views.index),
+    # authentication view
+    path('authentication/', views.auth_index),
 ]

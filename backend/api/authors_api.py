@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from backend.api.decorators import require_authenticated_non_get
+from backend.decorators import require_authenticated_non_get
 
 
 # Use to list all authors or create a new author

@@ -23,7 +23,6 @@ if not settings.SERVE_FRONTEND:
         }),
         re_path(r'^(?P<path>.*)$', serve, {
             'document_root': os.path.join(settings.BASE_DIR, 'frontend/out'),
-            'path': 'index.html',
         }),
     ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

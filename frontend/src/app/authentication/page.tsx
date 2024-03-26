@@ -1,27 +1,61 @@
-import { Metadata } from "next"
-import Link from "next/link"
+"use client";
+import Link from "next/link";
 
-import Image from "next/image"
-import { UserAuthForm } from "@/components/authentication/user-auth-form"
-
-export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Authentication page built using the components.",
-}
+import Image from "next/image";
+import { UserAuthForm } from "@/components/authentication/user-auth-form";
+import { AuthContext, AuthorContext } from "@/components/context/authContext";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { AuthResponse } from "@/types/auth";
+import { axiosInstance } from "@/lib/axiosInstance";
+import { Icons } from "@/components/icons";
 
 export default function AuthenticationPage() {
+  const router = useRouter();
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const { setAuthor } = useContext(AuthorContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/auth/check-login/", { withCredentials: true })
+      .then((response: AuthResponse) => {
+        console.log(response);
+        if (response.data.logged_in) {
+          console.log("User is logged in");
+          setIsAuthenticated(true);
+          setAuthor(response.data.user);
+          router.push("/");
+        } else {
+          setIsAuthenticated(false);
+          setAuthor(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking login status", error);
+      });
+  }, [isAuthenticated, setIsAuthenticated, setAuthor, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Icons.spinner className="h-4 w-4 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="container relative hidden flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0 h-[calc(100vh-4.125rem)]">
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0 bg-zinc-900">
-          <Image
-            src="./auth_splash.jpg"
-            alt="Photo by https://unsplash.com/@pawel_czerwinski"
-            fill
-            priority={true}
-            className="rounded-md object-cover"
-          />
+            <Image
+              src="/auth_splash.jpg"
+              alt="Photo by https://unsplash.com/@pawel_czerwinski"
+              fill
+              priority={true}
+              className="rounded-md object-cover"
+            />
           </div>
         </div>
         <div className="lg:p-8">
@@ -56,5 +90,5 @@ export default function AuthenticationPage() {
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from backend.api import *
 import backend.views as views
 
@@ -24,6 +24,12 @@ urlpatterns = [
     path('service/authors/<str:author_id>/liked/', author_liked, name='author_liked'),
     # inbox api
     path('service/authors/<str:author_id>/inbox/', author_inbox, name='author_inbox'),
+    # auth api
+    path('auth/check-login/', check_user_login_status, name='check_user_login_status'),
+    path('auth/github/callback/', github_callback, name='github_callback'),
+    
+    # allauth
+    path('accounts/', include('allauth.urls')),
 
     # View
     # index view

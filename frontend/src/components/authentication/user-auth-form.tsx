@@ -15,10 +15,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
     setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/accounts/github/login/`;
   }
 
   return (

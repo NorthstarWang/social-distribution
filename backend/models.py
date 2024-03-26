@@ -1,10 +1,12 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
 class Author(AbstractUser):
-    id = models.URLField(primary_key=True)
-    host = models.URLField()
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    host = models.URLField(default='')
     displayName = models.CharField(max_length=255)
     github = models.URLField()
     profileImage = models.URLField()

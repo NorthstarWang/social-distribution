@@ -18,10 +18,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%'
 
-if SERVE_FRONTEND:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["localhost", "social-distribution-yang-240ab3a73d7f.herokuapp.com"]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # Allow the frontend domain
+]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,7 +32,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'backend',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +50,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'social_distribution.urls'
@@ -96,13 +106,37 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-CORS_ORIGIN_ALLOW_ALL = True
-
+CORS_ALLOW_ALL_ORIGINS = False
+AUTH_USER_MODEL = 'backend.Author'
+SOCIALACCOUNT_ADAPTER = 'backend.adapters.CustomSocialAccountAdapter'
+CORS_ALLOW_CREDENTIALS = True
+SITE_ID = 1
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = '/auth/github/callback/'
+FRONTEND_HOME = 'http://localhost:3000/' if LOCAL else '/'
+
+if LOCAL:
+    SOCIALACCOUNT_PROVIDERS = {
+        'github': {
+            'SCOPE': ['user', 'repo'],
+            'APP': {
+                'client_id': os.environ.get('GITHUB_LOCAL_CLIENT_ID'),
+                'secret': os.environ.get('GITHUB_LOCAL_CLIENT_SECRET'),
+                'key': ''
+            }
+        }
+    }
+else:
+    SOCIALACCOUNT_PROVIDERS = {
+        'github': {
+            'APP': {
+                'client_id': os.environ.get('GITHUB_CLIENT_ID'),
+                'secret': os.environ.get('GITHUB_CLIENT_SECRET'),
+                'key': ''
+            }
+        }
+    }
+

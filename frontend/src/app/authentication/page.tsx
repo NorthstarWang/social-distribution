@@ -29,6 +29,7 @@ export default function AuthenticationPage() {
         } else {
           setIsAuthenticated(false);
           setAuthor(null);
+          setIsLoading(false);
         }
       })
       .catch((error) => {

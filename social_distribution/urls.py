@@ -1,3 +1,4 @@
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
@@ -22,6 +23,7 @@ if not settings.SERVE_FRONTEND:
         }),
         re_path(r'^(?P<path>.*)$', serve, {
             'document_root': os.path.join(settings.BASE_DIR, 'frontend/out'),
+            'path': 'index.html',
         }),
-    ]
+    ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

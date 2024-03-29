@@ -33,7 +33,7 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
                     }
 
                     return (
-                      <Link href={item.href} key={itemIndex}>
+                      <Link href={item.href} key={`${index}-${itemIndex}`}>
                         <Button
                           variant="ghost"
                           className="w-full justify-start"
@@ -50,8 +50,8 @@ export function Sidebar({ className }: React.HTMLAttributes<HTMLDivElement>) {
         })}
       </ScrollArea>
       <Separator className="mb-1" />
-      <div className="flex space-x-1 px-3">
-        <Button variant="ghost" className="h-14 w-14" size="icon" asChild>
+      <div className="flex items-center space-x-1 px-3">
+        <Button variant="ghost" className="h-14 w-14" size="icon">
           <Link href={siteConfig.links.github}>
             <GitHubLogoIcon className="h-8 w-8" />
             <span className="sr-only">GitHub</span>

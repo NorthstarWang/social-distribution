@@ -116,25 +116,14 @@ export function MobileNav() {
             )}
           </div>
         </ScrollArea>
-        <div className="flex space-x-2">
-          
-        <Link
-                href={siteConfig.links.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div
-                  className={buttonVariants({
-                    size: "icon",
-                    variant: "ghost",
-                    className: "h-14 w-14",
-                  })}
-                >
-                  <GitHubLogoIcon className="h-8 w-8" />
-                  <span className="sr-only">GitHub</span>
-                </div>
-              </Link>
-            <ModeToggle />
+        <div className="flex items-center space-x-1">
+          <Button variant="ghost" className="h-14 w-14" size="icon">
+            <Link href={siteConfig.links.github}>
+              <GitHubLogoIcon className="h-8 w-8" />
+              <span className="sr-only">GitHub</span>
+            </Link>
+          </Button>
+          <ModeToggle />
         </div>
       </SheetContent>
     </Sheet>

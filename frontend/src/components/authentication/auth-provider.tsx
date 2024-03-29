@@ -6,6 +6,7 @@ import { axiosInstance } from '@/lib/axiosInstance';
 import { AuthResponse } from '@/types/auth';
 import { useRouter, usePathname } from "next/navigation";
 import { Progress } from "@/components/ui/progress"
+import path from 'path';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -48,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       .catch((error) => {
         console.error("Error checking login status", error);
       });
-  }, [isAuthenticated, setIsAuthenticated, setAuthor, router]);
+  }, [isAuthenticated, setIsAuthenticated, setAuthor, router, pathname]);
 
   if (loading) {
     return (

@@ -40,6 +40,8 @@ const BrowsePost = () => {
               displayName: `Author ${uniqueId}`,
               github: 'https://github.com/example',
               profileImage: 'https://example.com/profile-image.png',
+              username: `author-${uniqueId}`,
+              bio: 'This is a simulated author bio.',
             },
           });
         }

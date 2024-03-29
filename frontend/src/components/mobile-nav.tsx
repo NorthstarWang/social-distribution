@@ -8,7 +8,7 @@ import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetFooter, SheetTrigger } from "@/components/ui/sheet";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { NavItem } from "@/types/nav";
 import { AuthContext } from "@/components/context/authContext";
@@ -58,8 +58,8 @@ export function MobileNav() {
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="pr-0">
-        <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+      <SheetContent side="left" className="pr-0 pt-8 flex flex-col h-full">
+        <ScrollArea className="flex-1 my-4 pb-10 pl-6 h-full">
           <div className="flex flex-col space-y-3">
             {isAuthenticated ? null : (
               <MobileLink
@@ -116,15 +116,16 @@ export function MobileNav() {
             )}
           </div>
         </ScrollArea>
-        <div className="flex items-center space-x-1">
-          <Button variant="ghost" className="h-14 w-14" size="icon">
+        
+      <SheetFooter className="flex-shrink-0 flex flex-row items-center space-x-1 p-3">
+        <Button variant="ghost" className="h-14 w-14" size="icon">
             <Link href={siteConfig.links.github}>
               <GitHubLogoIcon className="h-8 w-8" />
               <span className="sr-only">GitHub</span>
             </Link>
           </Button>
           <ModeToggle />
-        </div>
+      </SheetFooter>
       </SheetContent>
     </Sheet>
   );

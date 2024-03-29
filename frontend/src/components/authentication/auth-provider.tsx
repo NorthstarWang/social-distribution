@@ -33,7 +33,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (response.data.logged_in) {
           setIsAuthenticated(true);
           setAuthor(response.data.user as Author);
-          console.log(response.data)
           if (pathname === "/authentication/") {
             router.push("/");
           }

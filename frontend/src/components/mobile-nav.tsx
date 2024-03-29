@@ -6,14 +6,18 @@ import { useRouter } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { NavItem } from "@/types/nav";
+import { AuthContext } from "@/components/context/authContext";
+import { useContext } from "react";
+import { ModeToggle } from "@/components/theme-toggle";
 
 export function MobileNav() {
   const [open, setOpen] = React.useState(false);
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -57,18 +61,20 @@ export function MobileNav() {
       <SheetContent side="left" className="pr-0">
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
-            <MobileLink
-              href="/"
-              className="flex items-center"
-              onOpenChange={setOpen}
-            >
-              <Button>
-                <GitHubLogoIcon className="mr-2 h-4 w-4" /> Login with Github
-              </Button>
-            </MobileLink>
+            {isAuthenticated ? null : (
+              <MobileLink
+                href="/"
+                className="flex items-center"
+                onOpenChange={setOpen}
+              >
+                <Button>
+                  <GitHubLogoIcon className="mr-2 h-4 w-4" /> Login with Github
+                </Button>
+              </MobileLink>
+            )}
             {siteConfig.mainNav?.map(
               (item) =>
-                !item.requireAuth &&
+                (isAuthenticated || !item.requireAuth) &&
                 item.href && (
                   <MobileLink
                     key={item.href}
@@ -80,30 +86,56 @@ export function MobileNav() {
                 )
             )}
           </div>
-          <div className="flex flex-col space-y-2">
-            {siteConfig.sidebarNav.map((item, index) => !item.requireAuth && (
-              <div key={index} className="flex flex-col space-y-3 pt-6">
-                <h4 className="font-medium">{item.title}</h4>
-                {item?.items?.length &&
-                  item.items.map((item: NavItem) => (!item.requireAuth &&
-                    <React.Fragment key={item.href}>
-                      {(item.href ? (
-                          <MobileLink
-                            href={item.href}
-                            onOpenChange={setOpen}
-                            className="text-muted-foreground"
-                          >
-                            {item.title}
-                          </MobileLink>
-                        ) : (
-                          item.title
-                        ))}
-                    </React.Fragment>
-                  ))}
-              </div>
-            ))}
+          <div className="flex flex-col space-y-2 pb-4">
+            {siteConfig.sidebarNav.map(
+              (item, index) =>
+                (isAuthenticated || !item.requireAuth) && (
+                  <div key={index} className="flex flex-col space-y-3 pt-6">
+                    <h4 className="font-medium">{item.title}</h4>
+                    {item?.items?.length &&
+                      item.items.map(
+                        (item: NavItem) =>
+                          (isAuthenticated || !item.requireAuth) && (
+                            <React.Fragment key={item.href}>
+                              {item.href ? (
+                                <MobileLink
+                                  href={item.href}
+                                  onOpenChange={setOpen}
+                                  className="text-muted-foreground"
+                                >
+                                  {item.title}
+                                </MobileLink>
+                              ) : (
+                                item.title
+                              )}
+                            </React.Fragment>
+                          )
+                      )}
+                  </div>
+                )
+            )}
           </div>
         </ScrollArea>
+        <div className="flex space-x-2">
+          
+        <Link
+                href={siteConfig.links.github}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div
+                  className={buttonVariants({
+                    size: "icon",
+                    variant: "ghost",
+                    className: "h-14 w-14",
+                  })}
+                >
+                  <GitHubLogoIcon className="h-8 w-8" />
+                  <span className="sr-only">GitHub</span>
+                </div>
+              </Link>
+            <ModeToggle />
+        </div>
       </SheetContent>
     </Sheet>
   );

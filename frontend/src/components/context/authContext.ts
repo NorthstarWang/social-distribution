@@ -1,9 +1,14 @@
 import { Author } from '@/types/author';
 import { createContext } from 'react';
 
-export const AuthContext = createContext({
-  isAuthenticated: false as boolean,
-  setIsAuthenticated: (value: boolean | ((prevVar: boolean) => boolean)) => {},
+type AuthContextType = {
+  isAuthenticated: boolean;
+  setIsAuthenticated: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+};
+
+export const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  setIsAuthenticated: (value: any | ((prevVar: any) => any)) => {},
 });
 
 export const AuthorContext = createContext({

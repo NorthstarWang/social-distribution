@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/site-header";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
-import { AuthProvider } from "@/components/authentication/authProvider";
+import { AuthProvider } from "@/components/authentication/auth-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

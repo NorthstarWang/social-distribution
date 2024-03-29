@@ -10,6 +10,9 @@ class Author(AbstractUser):
     displayName = models.CharField(max_length=255)
     github = models.URLField()
     profileImage = models.URLField()
+    bio = models.TextField(default='', blank=True, null=True)
+    username = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(default='', blank=True, null=True)
     groups = models.ManyToManyField('auth.Group', related_name='author_groups')
     user_permissions = models.ManyToManyField('auth.Permission', related_name='author_permissions')
 
@@ -20,7 +23,10 @@ class Author(AbstractUser):
             "host": self.host,
             "displayName": self.displayName,
             "github": self.github,
-            "profileImage": self.profileImage
+            "profileImage": self.profileImage,
+            "username": self.username,
+            "email": self.email,
+            "bio": self.bio
         }
 
 

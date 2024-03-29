@@ -11,7 +11,7 @@ User = get_user_model()
 @require_http_methods(['GET'])
 def check_user_login_status(request):
     if request.user.is_authenticated:
-        user_data = request.user.author.as_json() if hasattr(request.user, 'author') else {}
+        user_data = request.user.as_json()
         return JsonResponse({
             'logged_in': True,
             'user': user_data

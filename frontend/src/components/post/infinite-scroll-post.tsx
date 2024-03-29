@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { PostCard } from "./post-card";
+import { PostCard } from "@/components/post/post-card";
 import { Post } from "@/types/post";
 import { Icons } from "@/components/icons";
 

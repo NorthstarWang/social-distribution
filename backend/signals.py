@@ -40,4 +40,6 @@ def save_author(author, social_account):
     author.profileImage = extra_data.get('avatar_url', '')
     author.bio = extra_data.get('bio', '')
     author.displayName = extra_data.get('name', '')
+    author.username = extra_data.get('login', '')
+    author.email = extra_data.get('email', '')
     author.save()

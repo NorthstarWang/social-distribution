@@ -4,5 +4,6 @@ export interface Author {
     displayName: string;
     github: string;
     profileImage: string;
+    username: string;
     bio?: string;
 }

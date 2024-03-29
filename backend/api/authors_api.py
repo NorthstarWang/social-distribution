@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
 from backend.decorators import require_authenticated_non_get
+from backend.models import Author
 
 
 # Use to list all authors or create a new author
@@ -14,7 +15,12 @@ def authors_list(request):
 @require_authenticated_non_get
 @require_http_methods(["GET", "PUT"])
 def author_detail(request, author_id):
-    return JsonResponse({'message': f'Getting or updating author {author_id}'})
+    # search author by author_id in the database
+    try:
+        user = Author.objects.get(id=author_id)
+        return JsonResponse(user.as_json())
+    except Author.DoesNotExist:
+        return JsonResponse({'message': 'Author not found'}, status=404)
 
 
 # Use to list all followers of an author

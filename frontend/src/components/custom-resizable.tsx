@@ -61,7 +61,7 @@ export default function CustomResizable({
         maxSize={40}
         className="hidden md:block h-[calc(100vh-4.125rem)]"
       >
-        <Sidebar className="hidden md:block" />
+        <Sidebar className="hidden md:block h-[calc(100vh-8rem)]" />
       </ResizablePanel>
       <ResizableHandle withHandle className="hidden md:flex" />
       <ResizablePanel

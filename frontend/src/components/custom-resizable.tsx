@@ -9,10 +9,16 @@ import {
 } from "@/components/ui/resizable";
 
 import { Sidebar } from "@/components/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+interface CustomResizableProps extends React.HTMLAttributes<HTMLDivElement> {
+  scrollable?: boolean;  // New prop with default value true
+}
 
 export default function CustomResizable({
   children,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  scrollable = true,
+}: CustomResizableProps) {
   const [panelSize, setPanelSize] = useState({ defaultSize: 15, minSize: 10 });
 
   function debounce(
@@ -68,7 +74,13 @@ export default function CustomResizable({
         className="h-[calc(100vh-4.125rem)]"
         defaultSize={100 - panelSize.defaultSize}
       >
-        {children}
+        {scrollable ? (
+          <ScrollArea className="col-span-3 md:col-span-4 h-full overflow-auto">
+            {children}
+          </ScrollArea>
+        ) : (
+          <>{children}</>
+        )}
       </ResizablePanel>
     </ResizablePanelGroup>
   );

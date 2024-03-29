@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PostCard } from "@/components/post/post-card";
 import { Post } from "@/types/post";
@@ -16,7 +16,7 @@ export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
   hasMore,
 }) => {
   return (
-    <div id="scrollableDiv" className="p-8 h-full overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-foreground scrollbar-track-background">
+    <div id="scrollableDiv" className="p-8 h-full overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-border scrollbar-track-background">
         <InfiniteScroll
           dataLength={initialData.length}
           next={fetchData}

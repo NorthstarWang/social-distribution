@@ -9,7 +9,7 @@ export default function BrowseLayout({ children }: BrowseLayoutProps) {
   return (
     <main className="flex flex-col">
       <div className="bg-background">
-        <CustomResizable>{children}</CustomResizable>
+        <CustomResizable scrollable={false}>{children}</CustomResizable>
       </div>
     </main>
   );

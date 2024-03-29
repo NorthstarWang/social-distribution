@@ -2,10 +2,9 @@
 import Link from "next/link";
 
 import { siteConfig } from "@/config/site";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { MainNav } from "@/components/main-nav";
-import { ModeToggle } from "@/components/theme-toggle";
 import { MobileNav } from "@/components/mobile-nav";
 import { AuthContext, AuthorContext } from "@/components/context/authContext";
 import { useContext } from "react";

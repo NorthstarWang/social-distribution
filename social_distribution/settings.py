@@ -117,6 +117,10 @@ SITE_ID = 1
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/auth/github/callback/'
 FRONTEND_HOME = 'http://localhost:3000/' if LOCAL else '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = 'http://localhost:3000/' if SERVE_FRONTEND else '/'
 
 if LOCAL:
     SOCIALACCOUNT_PROVIDERS = {

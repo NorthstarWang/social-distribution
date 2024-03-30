@@ -23,6 +23,10 @@ export function UserAvatar({ author, dimension = 10 }: UserAvatarProps) {
 
   const dimensionStyles = `h-${dimension} w-${dimension}`;
 
+  const handleLogout = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}//accounts/logout/`;
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -54,7 +58,7 @@ export function UserAvatar({ author, dimension = 10 }: UserAvatarProps) {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -1,6 +1,7 @@
 from django.urls import path, include
 from backend.api import *
 import backend.views as views
+from backend.view import *
 
 urlpatterns = [
     # API
@@ -35,5 +36,5 @@ urlpatterns = [
     # index view
     path('', views.index),
     # authentication view
-    path('authentication/', views.auth_index),
+    path('authentication/', auth_view),
 ]

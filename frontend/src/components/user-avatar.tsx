@@ -24,7 +24,7 @@ export function UserAvatar({ author, dimension = 10 }: UserAvatarProps) {
   const dimensionStyles = `h-${dimension} w-${dimension}`;
 
   const handleLogout = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}//accounts/logout/`;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/accounts/logout/`;
   };
 
   return (

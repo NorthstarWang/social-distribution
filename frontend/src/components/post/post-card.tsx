@@ -32,6 +32,8 @@ import { Separator } from "@/components/ui/separator";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Post } from "@/types/post";
 import { Author } from "@/types/author";
+import { CommentDrawer } from "@/components/post/comment-section";
+import { Button } from "@/components/ui/button";
 
 type CardProps = React.ComponentProps<typeof Card> & {
   post: Post;
@@ -123,7 +125,7 @@ export function PostCard({ className, post, ...props }: CardProps) {
           </div>
         </Link>
       )}
-      <CardFooter className="flex flex-col space-y-4 pb-6">
+      <CardFooter className="flex flex-col space-y-2 pb-2">
         <div className="flex justify-between w-full">
           <CardDescription>5,646 likes</CardDescription>
           <CardDescription className="flex justify-end">
@@ -131,59 +133,43 @@ export function PostCard({ className, post, ...props }: CardProps) {
           </CardDescription>
         </div>
         <Separator />
-        <div className="flex justify-between w-full mt-2">
-          <Link
-            href="/"
-            size="2"
-            color="indigo"
-            weight="medium"
-            underline="none"
-            highContrast
-          >
-            <div className="flex items-center justify-center gap-1">
-              <HeartIcon />
-              <span>Like</span>
-            </div>
-          </Link>
-          <Link
-            href="/"
-            size="2"
-            color="indigo"
-            weight="medium"
-            underline="none"
-            highContrast
-          >
-            <div className="flex items-center justify-center gap-1">
-              <EyeOpenIcon />
-              <span>Follow</span>
-            </div>
-          </Link>
-          <Link
-            href="/"
-            size="2"
-            color="indigo"
-            weight="medium"
-            underline="none"
-            highContrast
-          >
-            <div className="flex items-center justify-center gap-1">
-              <ChatBubbleIcon />
-              <span>Comment</span>
-            </div>
-          </Link>
-          <Link
-            href="/"
-            size="2"
-            color="indigo"
-            weight="medium"
-            underline="none"
-            highContrast
-          >
-            <div className="flex items-center justify-center gap-1">
-              <PaperPlaneIcon />
-              <span>Share</span>
-            </div>
-          </Link>
+        <div className="flex justify-between w-full">
+          <CommentDrawer postId={post.id}>
+            <Button
+              variant="link"
+              className="flex items-center justify-center gap-1 p-0"
+            >
+              <HeartIcon className="h-4 w-4" />
+              Like
+            </Button>
+          </CommentDrawer>
+          <CommentDrawer postId={post.id}>
+            <Button
+              variant="link"
+              className="flex items-center justify-center gap-1 p-0"
+            >
+              <EyeOpenIcon className="h-4 w-4" />
+              Follow
+            </Button>
+          </CommentDrawer>
+          <CommentDrawer postId={post.id}>
+            <Button
+              variant="link"
+              className="flex items-center justify-center gap-1 p-0"
+            >
+              <ChatBubbleIcon className="h-4 w-4" />
+              Comment
+            </Button>
+          </CommentDrawer>
+          <CommentDrawer postId={post.id}>
+            <Button
+              variant="link"
+              className="flex items-center justify-center gap-1 p-0"
+            >
+              <PaperPlaneIcon className="h-4 w-4" />
+              Share
+            </Button>
+          </CommentDrawer>
         </div>
       </CardFooter>
     </Card>

@@ -8,18 +8,17 @@ const BrowsePost = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const fetchPosts = useCallback(async () => {
-    const newPosts: Post[] = await fetchMorePosts(posts.length / 4 + 1);
+    const newPosts: Post[] = await fetchMorePosts();
     setPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setHasMore(newPosts.length > 0);
-  }, [posts.length]);
+  }, []);
 
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  async function fetchMorePosts(page: number): Promise<Post[]> {
+  async function fetchMorePosts(): Promise<Post[]> {
     return new Promise((resolve) => {
-      setTimeout(() => {
         const newPosts: Post[] = [];
         for (let i = 0; i < 4; i++) {
           const uniqueId = `post-${new Date().getTime()}-${Math.floor(Math.random() * 10000)}`;
@@ -33,7 +32,7 @@ const BrowsePost = () => {
             origin: 'https://origin.example.com',
             published: new Date(),
             visibility: 'PUBLIC',
-            count: Math.floor(Math.random() * 100), // Random number of comments
+            count: Math.floor(Math.random() * 100),
             author: {
               id: `author-${uniqueId}`,
               host: 'https://host.example.com',
@@ -46,7 +45,6 @@ const BrowsePost = () => {
           });
         }
         resolve(newPosts);
-      }, 1000);
     });
   }
 

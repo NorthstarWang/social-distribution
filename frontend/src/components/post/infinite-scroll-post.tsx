@@ -26,7 +26,7 @@ export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
           style={{ overflow: "hidden" }}
         >
           {initialData.map((item: Post) => (
-            <PostCard key={item.id} post={item} />
+            <PostCard key={item.id} post={item}/>
           ))}
         </InfiniteScroll>
     </div>

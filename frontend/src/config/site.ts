@@ -10,13 +10,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      title: "Feed",
-      href: "/feed",
-      requireAuth: true,
+      title: "Search",
+      href: "/",
     },
     {
-      title: "Inbox",
-      href: "/inbox",
+      title: "Notification",
+      href: "/",
       requireAuth: true,
     },
   ],

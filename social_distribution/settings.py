@@ -1,6 +1,9 @@
 import os
 import dj_database_url
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 DEBUG = True
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -23,7 +26,6 @@ ALLOWED_HOSTS = ["localhost", "social-distribution-yang-240ab3a73d7f.herokuapp.c
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Allow the frontend domain
 ]
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -144,3 +146,11 @@ else:
         }
     }
 
+CLOUDINARY_CLOUD_NAME = os.environ.get('CLOUDINARY_CLOUD_NAME')
+CLOUDINARY_API_KEY = os.environ.get('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.environ.get('CLOUDINARY_API_SECRET')
+cloudinary.config(
+    cloud_name=CLOUDINARY_CLOUD_NAME,
+    api_key=CLOUDINARY_API_KEY,
+    api_secret=CLOUDINARY_API_SECRET
+)

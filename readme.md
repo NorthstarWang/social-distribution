@@ -33,6 +33,9 @@ Ensure you have the following installed:
    GITHUB_LOCAL_CLIENT_SECRET=<YOUR_GITHUB_LOCAL_CLIENT_SECRET>
    GITHUB_CLIENT_ID=<YOUR_GITHUB_CLIENT_ID>
    GITHUB_CLIENT_SECRET=<YOUR_GITHUB_CLIENT_SECRET>
+   CLOUDINARY_CLOUD_NAME=<your_cloud_name>
+   CLOUDINARY_API_KEY=<your_api_key>
+   CLOUDINARY_API_SECRET=<your_api_secret>
    ```
 
 4. Configure your PostgreSQL database in `social_distribution/settings.py`. Replace the debug database settings with

@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { AuthProvider } from "@/components/authentication/auth-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   <SiteHeader />
                   <div className="flex-1 overflow-hidden h-[calc(100vh-4.125rem)]">
                     {children}
+                    <Toaster />
                   </div>
                 </div>
               </AuthProvider>

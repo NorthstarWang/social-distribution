@@ -10,13 +10,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Author } from "@/types/author";
+import Link from "next/link";
 
 interface UserAvatarProps {
   author: Author | null;
   dimension?: number;
+  dropdown?: boolean;
 }
 
-export function UserAvatar({ author, dimension = 10 }: UserAvatarProps) {
+export function UserAvatar({
+  author,
+  dimension = 10,
+  dropdown = true,
+}: UserAvatarProps) {
   if (!author) {
     return null;
   }
@@ -26,6 +32,16 @@ export function UserAvatar({ author, dimension = 10 }: UserAvatarProps) {
   const handleLogout = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/accounts/logout/`;
   };
+  if (dropdown === false) {
+    return (
+      <Link href={`/profile/${author.username}`}>
+        <Avatar className={dimensionStyles}>
+          <AvatarImage src={author.profileImage} alt={author.displayName} />
+          <AvatarFallback>PFP</AvatarFallback>
+        </Avatar>
+      </Link>
+    );
+  }
 
   return (
     <DropdownMenu>

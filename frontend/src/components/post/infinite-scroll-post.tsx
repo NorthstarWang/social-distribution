@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+import React, { use } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PostCard } from "@/components/post/post-card";
 import { Post } from "@/types/post";
 import { Icons } from "@/components/icons";
+import { CreatePost } from "./create-post";
+import { AuthContext } from "@/components/context/authContext";
 
 interface InfiniteScrollPostProps {
   initialData: Post[];
@@ -15,20 +18,32 @@ export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
   fetchData,
   hasMore,
 }) => {
+  const { isAuthenticated } = use(AuthContext);
   return (
-    <div id="scrollableDiv" className="p-8 h-full overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-border scrollbar-track-background">
+    <div
+      id="scrollableDiv"
+      className="p-8 h-full overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-border scrollbar-track-background"
+    >
+      <div className="flex flex-col w-full">
+        {isAuthenticated && <CreatePost />}
         <InfiniteScroll
+          className="max-w-4xl mx-auto"
           dataLength={initialData.length}
           next={fetchData}
           hasMore={hasMore}
-          loader={<div className=" flex justify-center"><Icons.spinner className="mr-2 h-4 w-4 animate-spin" /></div>}
+          loader={
+            <div className=" flex justify-center">
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            </div>
+          }
           scrollableTarget="scrollableDiv"
           style={{ overflow: "hidden" }}
         >
           {initialData.map((item: Post) => (
-            <PostCard key={item.id} post={item}/>
+            <PostCard key={item.id} post={item} />
           ))}
         </InfiniteScroll>
+      </div>
     </div>
   );
 };

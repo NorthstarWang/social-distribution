@@ -9,10 +9,12 @@ import { AuthorContext } from "@/components/context/authContext";
 import { CustomDialog } from "@/components/custom-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
+import { Icons } from "@/components/icons";
 
 export function CreatePost() {
   const { author } = useContext(AuthorContext);
   const [markdown, setMarkdown] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleMarkdownChange = (event: {
     target: { value: SetStateAction<string> };
@@ -35,32 +37,40 @@ export function CreatePost() {
   };
 
   const uploadImageToCloudinary = async (file: Blob) => {
+    setIsLoading(true);
     const formData = new FormData();
+    let imageUrl = "";
     formData.append("file", file);
-    formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "");
-  
+    formData.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""
+    );
+
     try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-  
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Cloudinary upload error: ", errorData);
-        return null; // Handle this accordingly in your UI
+      } else {
+        const data = await response.json();
+        imageUrl = data.secure_url;
       }
-  
-      const data = await response.json();
-      return data.secure_url;
     } catch (error) {
       console.error("Error uploading image to Cloudinary: ", error);
-      return null; // Handle this accordingly in your UI
+    } finally {
+      setIsLoading(false);
+      return imageUrl;
     }
   };
-  
 
-  const insertImageToMarkdown = (imageUrl: any) => {
+  const insertImageToMarkdown = (imageUrl: string) => {
     const imageMarkdown = `![Image](${imageUrl})\n`;
     setMarkdown((prevMarkdown) => prevMarkdown + imageMarkdown);
   };
@@ -100,6 +110,11 @@ export function CreatePost() {
                     placeholder="We're writing to [inset]. Congrats from OpenAI!"
                     className="h-full min-h-[300px] lg:min-h-[700px] xl:min-h-[700px]"
                   />
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25">
+                      <Icons.spinner className="animate-spin" />
+                    </div>
+                  )}
                 </div>
                 <div className="rounded-md border bg-muted p-2 overflow-auto  max-h-[300px] lg:max-h-[700px]">
                   <ReactMarkdown>{markdown}</ReactMarkdown>

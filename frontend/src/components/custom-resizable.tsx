@@ -10,6 +10,7 @@ import {
 
 import { Sidebar } from "@/components/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { set } from "react-hook-form";
 
 interface CustomResizableProps extends React.HTMLAttributes<HTMLDivElement> {
   scrollable?: boolean;  // New prop with default value true
@@ -19,7 +20,23 @@ export default function CustomResizable({
   children,
   scrollable = true,
 }: CustomResizableProps) {
-  const [panelSize, setPanelSize] = useState({ defaultSize: 15, minSize: 10 });
+  function getPanelSize() {
+    const width = window.innerWidth;
+
+    if (width >= 2560) {
+      return { defaultSize: 10, minSize: 10, maxSize: 16};
+    } else if (width >= 1920) {
+      return { defaultSize: 12, minSize: 12, maxSize: 18};
+    } else if (width >= 1536) {
+      return { defaultSize: 14, minSize: 14, maxSize: 20};
+    } else if (width >= 1024) {
+      return { defaultSize: 20, minSize: 16, maxSize: 22};
+    } else {
+      return { defaultSize: 22, minSize: 18, maxSize: 24};
+    }
+  }
+
+  const [panelSize, setPanelSize] = useState(getPanelSize());
 
   function debounce(
     func: (...args: any[]) => void,
@@ -38,19 +55,7 @@ export default function CustomResizable({
 
   useEffect(() => {
     function handleResize() {
-      const width = window.innerWidth;
-
-      if (width >= 2560) {
-        setPanelSize({ defaultSize: 15, minSize: 10 });
-      } else if (width >= 1920) {
-        setPanelSize({ defaultSize: 17, minSize: 12 });
-      } else if (width >= 1536) {
-        setPanelSize({ defaultSize: 19, minSize: 14 });
-      } else if (width >= 1024) {
-        setPanelSize({ defaultSize: 25, minSize: 20 });
-      } else {
-        setPanelSize({ defaultSize: 30, minSize: 25 });
-      }
+      setPanelSize(getPanelSize());
     }
 
     const debouncedHandleResize = debounce(handleResize, 250);
@@ -64,7 +69,7 @@ export default function CustomResizable({
         collapsible
         minSize={panelSize.minSize}
         defaultSize={panelSize.defaultSize}
-        maxSize={40}
+        maxSize={panelSize.maxSize}
         className="hidden md:block h-[calc(100vh-4.125rem)]"
       >
         <Sidebar className="hidden md:block h-[calc(100vh-8rem)]" />

@@ -138,7 +138,7 @@ export function CreatePost() {
           title="Write a Post"
           titleDescription="Write the post to the community"
           content={
-            <div className="flex flex-col space-y-4 h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]">
+            <div className={`flex flex-col space-y-4 ${lessHeight ? "h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)]" : "h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]"}`}>
               <div className="grid h-full grid-cols-1 md:grid-cols-2 px-4 md:px-0 gap-6 lg:grid-rows-1">
                 <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
                   <Textarea
@@ -152,7 +152,7 @@ export function CreatePost() {
                     </div>
                   )}
                 </div>
-                <div className={`rounded-md border bg-muted p-2 overflow-auto h-full ${lessHeight ? "hidden" : ""}`}>
+                <div className={`rounded-md border bg-muted p-2 overflow-auto h-full ${lessHeight ? "hidden md:block" : ""}`}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
                 </div>
               </div>

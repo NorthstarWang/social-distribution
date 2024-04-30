@@ -10,6 +10,8 @@ import { CustomDialog } from "@/components/custom-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 import { Icons } from "@/components/icons";
+import remarkGfm from 'remark-gfm';
+import { CustomDropdown } from "@/components/custom-dropdown";
 
 export function CreatePost() {
   const { author } = useContext(AuthorContext);
@@ -75,6 +77,26 @@ export function CreatePost() {
     setMarkdown((prevMarkdown) => prevMarkdown + imageMarkdown);
   };
 
+  const handleSubmit = async () => {
+    const payload = { markdown };
+    try {
+      const response = await fetch('/api/submit-post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        console.log("Post submitted successfully");
+      } else {
+        console.error("Failed to submit post");
+      }
+    } catch (error) {
+      console.error("Error submitting post:", error);
+    }
+  };
+
   return (
     <>
       <Card className="flex mx-auto justify-around items-center max-w-lg w-full mb-4 px-2 py-6">
@@ -98,17 +120,16 @@ export function CreatePost() {
               Write a Post
             </Button>
           }
-          title="Share a Post"
-          titleDescription="Share the post via the shareble URI"
+          title="Write a Post"
+          titleDescription="Write the post to the community"
           content={
-            <div className="flex flex-col space-y-4">
-              <div className="grid h-full grid-rows-2 gap-6 lg:grid-cols-2 lg:grid-rows-1">
+            <div className="flex flex-col space-y-4 h-[calc(100vh-20rem)]">
+              <div className="grid h-full grid-rows-2 px-4 md:px-0 gap-6 lg:grid-cols-2 lg:grid-rows-1">
                 <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
                   <Textarea
                     value={markdown}
                     onChange={handleMarkdownChange}
-                    placeholder="We're writing to [inset]. Congrats from OpenAI!"
-                    className="h-full min-h-[300px] lg:min-h-[700px] xl:min-h-[700px]"
+                    className="h-full"
                   />
                   {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25">
@@ -116,12 +137,13 @@ export function CreatePost() {
                     </div>
                   )}
                 </div>
-                <div className="rounded-md border bg-muted p-2 overflow-auto  max-h-[300px] lg:max-h-[700px]">
-                  <ReactMarkdown>{markdown}</ReactMarkdown>
+                <div className="rounded-md border bg-muted p-2 overflow-auto h-full">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Button>Submit</Button>
+              <div className="flex justify-end items-center space-x-2">
+                <CustomDropdown title="Visibility" description="Select the visibility of the post" options={[{ value: "public", label: "Public" }, { value: "private", label: "Private" }, { value: "unlisted", label: "Unlisted" } ]} />
+              <Button onClick={handleSubmit}>Publish</Button>
               </div>
             </div>
           }

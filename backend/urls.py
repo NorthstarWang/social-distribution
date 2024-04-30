@@ -13,7 +13,7 @@ urlpatterns = [
          name='author_follower'),
     # posts api
     path('service/authors/<str:author_id>/posts/', author_posts, name='author_posts'),
-    path('service/authors/<str:author_id>/posts/<str:post_id>/', post_detail, name='post_detail'),
+    path('service/authors/<str:author_id>/posts/<str:post_id>/', post, name='post'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/', post_comments, name='post_comments'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/likes/', post_likes, name='post_likes'),
     # comments api

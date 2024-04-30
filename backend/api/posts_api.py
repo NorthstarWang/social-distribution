@@ -1,16 +1,42 @@
+import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 
+from backend.models import Post
 
-@require_http_methods(["GET", "POST"])
+
+@require_http_methods(["GET"])
 def author_posts(request, author_id):
-    return JsonResponse({'message': f'Listing posts or creating a new post for author {author_id}'})
+    posts = Post.objects.filter(author__id=author_id)
+    return JsonResponse({'posts': [post.as_json() for post in posts]}, safe=False)
+
+@require_http_methods(["GET", "POST", "PUT", "DELETE"])
+def post(request, author_id, post_id=None):
+    if request.method == 'GET':
+        return JsonResponse({'message': f'Retrieving post {post_id} of author {author_id}'})
+
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Authentication required'}, status=403)
+
+        data = json.loads(request.body)
+        post = Post(
+            author=request.user,  # Assuming user is logged in and set as the author
+            title=data['title'],
+            content=data['content'],
+            visibility=data.get('visibility', 'PUBLIC'),
+        )
+        post.save()
+        return JsonResponse(status=201)
 
 
-@require_http_methods(["GET", "PUT", "DELETE"])
-def post_detail(request, author_id, post_id):
-    return JsonResponse({'message': f'Getting, updating, or deleting post {post_id} for author {author_id}'})
+    elif request.method == 'PUT':
+        return JsonResponse({'message': 'Update post'})
 
+    elif request.method == 'DELETE':
+        return JsonResponse({'message': 'Delete post'})
+
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
 @require_http_methods(["GET", "POST"])
 def post_comments(request, author_id, post_id):

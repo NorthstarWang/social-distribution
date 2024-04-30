@@ -7,7 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { ReactNode, useState } from "react";
+import { useMediaQuery } from "usehooks-ts";
 
 interface CustomDialogProps {
   trigger: ReactNode;
@@ -24,17 +34,34 @@ export function CustomDialog({
   content,
   footer,
 }: CustomDialogProps) {
+  const [open, setOpen] = useState(false)
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>{trigger}</DialogTrigger>
+        <DialogContent className="max-w-6xl w-[calc(100vw-4rem)]">
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{titleDescription}</DialogDescription>
+          </DialogHeader>
+          {content}
+          <DialogFooter className="sm:justify-start">{footer}</DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-6xl">
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{titleDescription}</DialogDescription>
-        </DialogHeader>
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>{title}</DrawerTitle>
+        </DrawerHeader>
         {content}
-        <DialogFooter className="sm:justify-start">{footer}</DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <DrawerFooter className="pt-2">{footer}</DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

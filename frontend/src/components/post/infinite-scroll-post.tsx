@@ -27,7 +27,7 @@ export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
       <div className="flex flex-col w-full">
         {isAuthenticated && <CreatePost />}
         <InfiniteScroll
-          className="max-w-4xl mx-auto"
+          className="max-w-screen-xl mx-auto"
           dataLength={initialData.length}
           next={fetchData}
           hasMore={hasMore}

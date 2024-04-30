@@ -1,4 +1,4 @@
-import * as React from "react"
+import { useState } from "react";
 
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "usehooks-ts"
@@ -26,7 +26,7 @@ interface CommentSectionProps {
 }
 
 export function CommentDrawer({ postId, children }: CommentSectionProps) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
   if (isDesktop) {

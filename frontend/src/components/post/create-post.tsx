@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLinkIcon, Pencil2Icon } from "@radix-ui/react-icons";
 import { UserAvatar } from "@/components/user-avatar";
-import { SetStateAction, useContext, useState } from "react";
+import { SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthorContext } from "@/components/context/authContext";
 import { CustomDialog } from "@/components/custom-dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,6 +17,21 @@ export function CreatePost() {
   const { author } = useContext(AuthorContext);
   const [markdown, setMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [lessHeight, setLessHeight] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setLessHeight(window.innerHeight < 764);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
   const handleMarkdownChange = (event: {
     target: { value: SetStateAction<string> };
@@ -123,8 +138,8 @@ export function CreatePost() {
           title="Write a Post"
           titleDescription="Write the post to the community"
           content={
-            <div className="flex flex-col space-y-4 h-[calc(100vh-20rem)]">
-              <div className="grid h-full grid-rows-2 px-4 md:px-0 gap-6 lg:grid-cols-2 lg:grid-rows-1">
+            <div className="flex flex-col space-y-4 h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]">
+              <div className="grid h-full grid-cols-1 md:grid-cols-2 px-4 md:px-0 gap-6 lg:grid-rows-1">
                 <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
                   <Textarea
                     value={markdown}
@@ -137,7 +152,7 @@ export function CreatePost() {
                     </div>
                   )}
                 </div>
-                <div className="rounded-md border bg-muted p-2 overflow-auto h-full">
+                <div className={`rounded-md border bg-muted p-2 overflow-auto h-full ${lessHeight ? "hidden" : ""}`}>
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
                 </div>
               </div>

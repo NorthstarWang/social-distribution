@@ -9,7 +9,6 @@ import {
   HeartIcon,
   HeartFilledIcon,
 } from "@radix-ui/react-icons";
-
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -19,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Avatar,
   Box,
@@ -32,8 +32,15 @@ import { Separator } from "@/components/ui/separator";
 import { useLayoutEffect, useRef, useState } from "react";
 import { Post } from "@/types/post";
 import { Author } from "@/types/author";
-import { CommentDrawer } from "@/components/post/comment-section";
+import { CommentSection } from "@/components/post/comment-section";
 import { Button } from "@/components/ui/button";
+import { CustomDialog } from "@/components/custom-dialog";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 type CardProps = React.ComponentProps<typeof Card> & {
   post: Post;
@@ -42,7 +49,9 @@ type CardProps = React.ComponentProps<typeof Card> & {
 export function PostCard({ className, post, ...props }: CardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const author: Author = post.author;
 
@@ -65,6 +74,18 @@ export function PostCard({ className, post, ...props }: CardProps) {
       }
     };
   }, []);
+
+  const handleCopyToClipboard = () => {
+    const input = inputRef.current;
+    if (input) {
+      navigator.clipboard.writeText(input.value).then(() => {
+        setShowTooltip(true);
+        setTimeout(() => {
+          setShowTooltip(false);
+        }, 2000);
+      });
+    }
+  };
 
   return (
     <Card className={cn("w-full mb-8", className)} {...props}>
@@ -134,42 +155,66 @@ export function PostCard({ className, post, ...props }: CardProps) {
         </div>
         <Separator />
         <div className="flex justify-between w-full">
-          <CommentDrawer postId={post.id}>
-            <Button
-              variant="link"
-              className="flex items-center justify-center gap-1 p-0"
-            >
-              <HeartIcon className="h-4 w-4" />
-              Like
-            </Button>
-          </CommentDrawer>
-          <CommentDrawer postId={post.id}>
-            <Button
-              variant="link"
-              className="flex items-center justify-center gap-1 p-0"
-            >
-              <EyeOpenIcon className="h-4 w-4" />
-              Follow
-            </Button>
-          </CommentDrawer>
-          <CommentDrawer postId={post.id}>
-            <Button
-              variant="link"
-              className="flex items-center justify-center gap-1 p-0"
-            >
-              <ChatBubbleIcon className="h-4 w-4" />
-              Comment
-            </Button>
-          </CommentDrawer>
-          <CommentDrawer postId={post.id}>
-            <Button
-              variant="link"
-              className="flex items-center justify-center gap-1 p-0"
-            >
-              <PaperPlaneIcon className="h-4 w-4" />
-              Share
-            </Button>
-          </CommentDrawer>
+          <Button
+            variant="link"
+            className="flex items-center justify-center gap-1 p-0"
+          >
+            <HeartIcon className="h-4 w-4" />
+            Like
+          </Button>
+          <Button
+            variant="link"
+            className="flex items-center justify-center gap-1 p-0"
+          >
+            <EyeOpenIcon className="h-4 w-4" />
+            Follow
+          </Button>
+          <CustomDialog
+            trigger={
+              <Button
+                variant="link"
+                className="flex items-center justify-center gap-1 p-0"
+              >
+                <ChatBubbleIcon className="h-4 w-4" />
+                Comment
+              </Button>
+            }
+            title="Comment"
+            titleDescription="Leave your comment to the post"
+            content={<CommentSection />}
+            footer={<Button variant="outline">Cancel</Button>}
+          />
+          <CustomDialog
+            trigger={
+              <Button
+                variant="link"
+                className="flex items-center justify-center gap-1 p-0"
+              >
+                <PaperPlaneIcon className="h-4 w-4" />
+                Share
+              </Button>
+            }
+            title="Share"
+            titleDescription="Share this post with the url below"
+            content={
+              <div className="flex w-full items-center space-x-2">
+                <Input ref={inputRef} type="string" value={123} disabled />
+                <TooltipProvider disableHoverableContent>
+                  <Tooltip defaultOpen={false} disableHoverableContent open={showTooltip}>
+                    <TooltipTrigger asChild>
+                      <Button onClick={handleCopyToClipboard}>
+                        Copy to Clipboard
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p>Copied!</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            }
+            footer={<></>}
+          />
         </div>
       </CardFooter>
     </Card>

@@ -5,7 +5,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-DEBUG = True
+DEBUG = False
 # SECURITY WARNING: don't run with debug turned on in production!
 SERVE_FRONTEND = os.environ.get('SERVE_FRONTEND', 'False') == 'True'  # Set to 'True' for development
 LOCAL = os.environ.get('DJANGO_LOCAL', 'False') == 'True'  # Set to 'True' for local development
@@ -21,9 +21,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%'
 
-ALLOWED_HOSTS = ["localhost", "social-distribution-yang-240ab3a73d7f.herokuapp.com"]
+ALLOWED_HOSTS = ["localhost", '127.0.0.1', "social-distribution-yang-240ab3a73d7f.herokuapp.com"]
 
 CORS_ALLOWED_ORIGINS = [
+    
+    "http://127.0.0.1:8000",
     'http://localhost:3000',  # Allow the frontend domain
 ]
 

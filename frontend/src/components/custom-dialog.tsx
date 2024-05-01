@@ -25,6 +25,7 @@ interface CustomDialogProps {
   titleDescription: string;
   content: ReactNode;
   footer: ReactNode;
+  width: string;
 }
 
 export function CustomDialog({
@@ -33,6 +34,7 @@ export function CustomDialog({
   titleDescription,
   content,
   footer,
+  width
 }: CustomDialogProps) {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -41,7 +43,7 @@ export function CustomDialog({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent className="max-w-6xl w-[calc(100vw-4rem)]">
+        <DialogContent className={`max-w-${width} w-[calc(100vw-4rem)]`}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{titleDescription}</DialogDescription>

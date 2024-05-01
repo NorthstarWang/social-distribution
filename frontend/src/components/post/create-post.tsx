@@ -127,6 +127,7 @@ export function CreatePost() {
           titleDescription="Share the post via the shareble URI"
           content={<></>}
           footer={<></>}
+          width="lg"
         />
         <CustomDialog
           trigger={
@@ -163,6 +164,7 @@ export function CreatePost() {
             </div>
           }
           footer={<></>}
+          width="6xl"
         />
       </Card>
       <Separator className="flex mx-auto mb-4 max-w-4xl" />

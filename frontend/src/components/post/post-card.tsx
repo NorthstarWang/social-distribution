@@ -183,6 +183,7 @@ export function PostCard({ className, post, ...props }: CardProps) {
             titleDescription="Leave your comment to the post"
             content={<CommentSection />}
             footer={<Button variant="outline">Cancel</Button>}
+            width="6xl"
           />
           <CustomDialog
             trigger={
@@ -214,6 +215,7 @@ export function PostCard({ className, post, ...props }: CardProps) {
               </div>
             }
             footer={<></>}
+            width="lg"
           />
         </div>
       </CardFooter>

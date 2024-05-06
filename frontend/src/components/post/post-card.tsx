@@ -50,6 +50,8 @@ export function PostCard({ className, post, ...props }: CardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [commentDialogOpen, setCommentDialogOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -181,6 +183,8 @@ export function PostCard({ className, post, ...props }: CardProps) {
             }
             title="Comment"
             titleDescription="Leave your comment to the post"
+            open={commentDialogOpen}
+            onOpenChange={setCommentDialogOpen}
             content={<CommentSection />}
             footer={<Button variant="outline">Cancel</Button>}
             width="6xl"
@@ -197,6 +201,8 @@ export function PostCard({ className, post, ...props }: CardProps) {
             }
             title="Share"
             titleDescription="Share this post with the url below"
+            open={shareDialogOpen}
+            onOpenChange={setShareDialogOpen}
             content={
               <div className="flex w-full items-center space-x-2">
                 <Input ref={inputRef} type="string" value={123} disabled />

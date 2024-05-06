@@ -10,28 +10,37 @@ import { CustomDialog } from "@/components/custom-dialog";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 import { Icons } from "@/components/icons";
-import remarkGfm from 'remark-gfm';
+import remarkGfm from "remark-gfm";
 import { CustomDropdown } from "@/components/custom-dropdown";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 export function CreatePost() {
   const { author } = useContext(AuthorContext);
   const [markdown, setMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [lessHeight, setLessHeight] = useState(false);
+  const [title, setTitle] = useState("");
+  const [visibility, setVisibility] = useState("public");
+  const [postDialogOpen, setPostDialogOpen] = useState(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+
+
 
   useEffect(() => {
     const handleResize = () => {
       setLessHeight(window.innerHeight < 764);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   const handleMarkdownChange = (event: {
     target: { value: SetStateAction<string> };
@@ -73,14 +82,13 @@ export function CreatePost() {
       );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Cloudinary upload error: ", errorData);
+        toast.error("Cloudinary upload error");
       } else {
         const data = await response.json();
         imageUrl = data.secure_url;
       }
     } catch (error) {
-      console.error("Error uploading image to Cloudinary: ", error);
+      toast.error("Error uploading image to Cloudinary");
     } finally {
       setIsLoading(false);
       return imageUrl;
@@ -93,23 +101,59 @@ export function CreatePost() {
   };
 
   const handleSubmit = async () => {
-    const payload = { markdown };
-    try {
-      const response = await fetch('/api/submit-post', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      if (response.ok) {
-        console.log("Post submitted successfully");
-      } else {
-        console.error("Failed to submit post");
-      }
-    } catch (error) {
-      console.error("Error submitting post:", error);
+    if (!title.trim() || !markdown.trim()) {
+      toast.error("Title and content of the post cannot be empty");
+      return;
     }
+
+    const payload = {
+      title,
+      content: markdown,
+      visibility,
+    };
+
+    const promise = () =>
+      new Promise<void>(async (resolve, reject) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/service/post/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(payload),
+              credentials: "include",
+            }
+          );
+
+          if (response.ok) {
+            resolve();
+          } else {
+            reject("Failed to submit post");
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+    toast.promise(promise(), {
+      loading: "Submitting your post...",
+      success: () => {
+        setPostDialogOpen(false);
+        setMarkdown("");
+        setTitle("");
+        setVisibility("public");
+        return "Your post had been submitted successfully";
+      },
+      error: () => {
+        return "Failed to submit post";
+      },
+    });
+  };
+
+  const handleVisibilityChange = (newVisibility: string) => {
+    setVisibility(newVisibility);
   };
 
   return (
@@ -125,6 +169,8 @@ export function CreatePost() {
           }
           title="Share a Post"
           titleDescription="Share the post via the shareble URI"
+          open={shareDialogOpen}
+          onOpenChange={setShareDialogOpen}
           content={<></>}
           footer={<></>}
           width="lg"
@@ -138,14 +184,42 @@ export function CreatePost() {
           }
           title="Write a Post"
           titleDescription="Write the post to the community"
+          open={postDialogOpen}
+          onOpenChange={setPostDialogOpen}
           content={
-            <div className={`flex flex-col space-y-4 ${lessHeight ? "h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)]" : "h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]"}`}>
-              <div className="grid h-full grid-cols-1 md:grid-cols-2 px-4 md:px-0 gap-6 lg:grid-rows-1">
+            <div
+              className={`flex flex-col space-y-4 ${
+                lessHeight
+                  ? "h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)]"
+                  : "h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]"
+              }`}
+            >
+              <div className="grid w-full max-w-sm items-center px-4 md:px-0 gap-1.5">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  type="string"
+                  id="title"
+                  placeholder="Write your title here..."
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </div>
+              <div
+                className={`grid grid-cols-1 md:grid-cols-2 px-4 md:px-0 gap-6 lg:grid-rows-1 h-full
+              ${
+                lessHeight
+                  ? "max-h-[calc(100vh-16rem)]"
+                  : "max-h-[calc(100vh-28rem)]"
+              }`}
+              >
                 <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
                   <Textarea
                     value={markdown}
                     onChange={handleMarkdownChange}
-                    className="h-full"
+                    className={`${
+                      lessHeight ? "h-[calc(100vh-16rem)]" : "h-full"
+                    }`}
+                    style={{ resize: "none" }}
                   />
                   {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-25">
@@ -153,13 +227,35 @@ export function CreatePost() {
                     </div>
                   )}
                 </div>
-                <div className={`rounded-md border bg-muted p-2 overflow-auto h-full ${lessHeight ? "hidden md:block" : ""}`}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+                <div
+                  className={`rounded-md border bg-muted p-2 overflow-auto ${
+                    lessHeight ? "hidden md:block" : ""
+                  }`}
+                >
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {markdown}
+                  </ReactMarkdown>
                 </div>
               </div>
-              <div className="flex justify-end items-center space-x-2">
-                <CustomDropdown title="Visibility" description="Select the visibility of the post" options={[{ value: "public", label: "Public" }, { value: "private", label: "Private" }, { value: "unlisted", label: "Unlisted" } ]} />
-              <Button onClick={handleSubmit}>Publish</Button>
+              <div className="flex justify-end items-center space-x-2 px-4 md:px-0">
+                <CustomDropdown
+                  title="Visible to"
+                  optionalText
+                  description="Select the visibility of the post"
+                  options={[
+                    { value: "public", label: "Public" },
+                    { value: "private", label: "Private" },
+                    { value: "unlisted", label: "Unlisted" },
+                  ]}
+                  onOptionChange={handleVisibilityChange}
+                  defaultIndex={0}
+                />
+                <Button onClick={handleSubmit}>
+                  {isLoading && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Publish
+                </Button>
               </div>
             </div>
           }

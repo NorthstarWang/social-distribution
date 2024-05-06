@@ -1,7 +1,9 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt, requires_csrf_token
 
+from backend.decorators import require_authenticated_non_get
 from backend.models import Post
 
 
@@ -10,15 +12,20 @@ def author_posts(request, author_id):
     posts = Post.objects.filter(author__id=author_id)
     return JsonResponse({'posts': [post.as_json() for post in posts]}, safe=False)
 
+@csrf_exempt
+@requires_csrf_token
+@require_authenticated_non_get
 @require_http_methods(["GET", "POST", "PUT", "DELETE"])
-def post(request, author_id, post_id=None):
+def post(request, post_id=None):
+    print(request.body)
     if request.method == 'GET':
-        return JsonResponse({'message': f'Retrieving post {post_id} of author {author_id}'})
+        try:
+            post = Post.objects.get(pk=post_id)
+            return JsonResponse(post.as_json(), safe=False)
+        except Post.DoesNotExist:
+            return JsonResponse({'error': 'Post not found'}, status=404)
 
     elif request.method == 'POST':
-        if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Authentication required'}, status=403)
-
         data = json.loads(request.body)
         post = Post(
             author=request.user,  # Assuming user is logged in and set as the author
@@ -27,7 +34,7 @@ def post(request, author_id, post_id=None):
             visibility=data.get('visibility', 'PUBLIC'),
         )
         post.save()
-        return JsonResponse(status=201)
+        return JsonResponse({'message': True}, status=201)
 
 
     elif request.method == 'PUT':

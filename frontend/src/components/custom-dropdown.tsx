@@ -17,6 +17,9 @@ type CustomDropdownProps = {
     title: string;
     description: string;
     options: Array<{ value: string; label: string }>;
+    defaultIndex: number;
+    onOptionChange?: (value: string) => void;
+    optionalText?: boolean;
   };
   
 
@@ -24,16 +27,28 @@ export function CustomDropdown({
     title,
     description,
     options,
+    defaultIndex,
+    optionalText,
+    onOptionChange,
   }: CustomDropdownProps) {
+  const [option, setOption] = React.useState(options[defaultIndex].value)
+
+  const handleOptionChange = (value: string) => {
+    setOption(value);
+    if (onOptionChange) {
+        onOptionChange(value);
+    }
+};
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">{title}</Button>
+        <Button variant="outline">{title}{optionalText ? ' ' + option : ''}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>{description}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup>
+        <DropdownMenuRadioGroup value={option} onValueChange={handleOptionChange}>
           {options.map((option) => (
             <DropdownMenuRadioItem key={option.value} value={option.value}>
               {option.label}

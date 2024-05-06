@@ -24,9 +24,14 @@ SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%
 ALLOWED_HOSTS = ["localhost", '127.0.0.1', "social-distribution-yang-240ab3a73d7f.herokuapp.com"]
 
 CORS_ALLOWED_ORIGINS = [
-    
     "http://127.0.0.1:8000",
-    'http://localhost:3000',  # Allow the frontend domain
+    'http://localhost:3000',
+]
+
+CSRF_TRUSTED_ORIGINS=[
+    "http://127.0.0.1:8000",
+    'http://localhost:3000',
+    "https://social-distribution-yang-240ab3a73d7f.herokuapp.com",
 ]
 
 INSTALLED_APPS = [

@@ -53,7 +53,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   <SiteHeader />
                   <div className="flex-1 overflow-hidden h-[calc(100vh-4.125rem)]">
                     {children}
-                    <Toaster />
+                    <Toaster richColors/>
                   </div>
                 </div>
               </AuthProvider>

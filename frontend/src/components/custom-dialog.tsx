@@ -16,7 +16,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 interface CustomDialogProps {
@@ -26,6 +26,8 @@ interface CustomDialogProps {
   content: ReactNode;
   footer: ReactNode;
   width: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function CustomDialog({
@@ -34,14 +36,15 @@ export function CustomDialog({
   titleDescription,
   content,
   footer,
-  width
+  width,
+  open,
+  onOpenChange,
 }: CustomDialogProps) {
-  const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent className={`max-w-${width} w-[calc(100vw-4rem)]`}>
           <DialogHeader>
@@ -55,7 +58,7 @@ export function CustomDialog({
     );
   }
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>{trigger}</DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">

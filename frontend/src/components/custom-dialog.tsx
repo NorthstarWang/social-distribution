@@ -16,8 +16,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useContext, useEffect } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import { Toaster } from "@/components/ui/sonner";
 
 interface CustomDialogProps {
   trigger: ReactNode;
@@ -51,7 +52,10 @@ export function CustomDialog({
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{titleDescription}</DialogDescription>
           </DialogHeader>
-          {content}
+          <div>
+            {content}
+            <Toaster richColors position="top-center" />
+          </div>
           <DialogFooter className="sm:justify-start">{footer}</DialogFooter>
         </DialogContent>
       </Dialog>
@@ -66,6 +70,7 @@ export function CustomDialog({
         </DrawerHeader>
         {content}
         <DrawerFooter className="pt-2">{footer}</DrawerFooter>
+        <Toaster richColors position="top-center" />
       </DrawerContent>
     </Drawer>
   );

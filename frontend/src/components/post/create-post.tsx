@@ -209,7 +209,7 @@ export function CreatePost() {
               ${
                 lessHeight
                   ? "max-h-[calc(100vh-16rem)]"
-                  : "max-h-[calc(100vh-28rem)]"
+                  : "max-h-[calc(100vh-24rem)]"
               }`}
               >
                 <div onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>

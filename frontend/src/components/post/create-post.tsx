@@ -8,14 +8,12 @@ import { SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthorContext } from "@/components/context/authContext";
 import { CustomDialog } from "@/components/custom-dialog";
 import { Textarea } from "@/components/ui/textarea";
-import ReactMarkdown from "react-markdown";
 import { Icons } from "@/components/icons";
-import remarkGfm from "remark-gfm";
 import { CustomDropdown } from "@/components/custom-dropdown";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
+import { CustomMarkdown } from "@/components/custom-markdown";
 
 export function CreatePost() {
   const { author } = useContext(AuthorContext);
@@ -26,8 +24,6 @@ export function CreatePost() {
   const [visibility, setVisibility] = useState("public");
   const [postDialogOpen, setPostDialogOpen] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-
-
 
   useEffect(() => {
     const handleResize = () => {
@@ -228,13 +224,11 @@ export function CreatePost() {
                   )}
                 </div>
                 <div
-                  className={`rounded-md border bg-muted p-2 overflow-auto ${
+                  className={`rounded-md border p-2 overflow-auto ${
                     lessHeight ? "hidden md:block" : ""
                   }`}
                 >
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {markdown}
-                  </ReactMarkdown>
+                  <CustomMarkdown content={markdown} />
                 </div>
               </div>
               <div className="flex justify-end items-center space-x-2 px-4 md:px-0">

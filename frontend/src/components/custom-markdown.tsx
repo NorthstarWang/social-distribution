@@ -11,7 +11,6 @@ export function CustomMarkdown({ content }: { content: string }) {
   return (
     <div className="prose dark:prose-invert">
       <ReactMarkdown
-        children={content}
         remarkPlugins={[
           remarkGfm,
           remarkToc,
@@ -20,7 +19,10 @@ export function CustomMarkdown({ content }: { content: string }) {
           remarkGemoji,
         ]}
         rehypePlugins={[rehypeKatex, rehypeHighlight]}
-      />
+      >
+        {content}
+      </ReactMarkdown>
     </div>
   );
 }
+

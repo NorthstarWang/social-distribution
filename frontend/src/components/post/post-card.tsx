@@ -41,6 +41,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
+import { CustomMarkdown } from "@/components/custom-markdown";
 
 type CardProps = React.ComponentProps<typeof Card> & {
   post: Post;
@@ -130,7 +131,7 @@ export function PostCard({ className, post, ...props }: CardProps) {
           !isExpanded ? "max-h-96 overflow-hidden" : ""
         }`}
       >
-        {post.content}
+        <CustomMarkdown content={post.content} />
       </CardContent>
       {isOverflowing && !isExpanded && (
         <Link
@@ -207,7 +208,11 @@ export function PostCard({ className, post, ...props }: CardProps) {
               <div className="flex w-full items-center space-x-2">
                 <Input ref={inputRef} type="string" value={123} disabled />
                 <TooltipProvider disableHoverableContent>
-                  <Tooltip defaultOpen={false} disableHoverableContent open={showTooltip}>
+                  <Tooltip
+                    defaultOpen={false}
+                    disableHoverableContent
+                    open={showTooltip}
+                  >
                     <TooltipTrigger asChild>
                       <Button onClick={handleCopyToClipboard}>
                         Copy to Clipboard

@@ -9,7 +9,7 @@ import remarkGemoji from "remark-gemoji";
 
 export function CustomMarkdown({ content }: { content: string }) {
   return (
-    <div className="prose dark:prose-invert">
+    <div className="prose dark:prose-invert mx-auto max-w-[360px] md:max-w-[500px] lg:max-w-[700px] xl:max-w-[900px] 2xl:max-w-[1100px]">
       <ReactMarkdown
         remarkPlugins={[
           remarkGfm,

@@ -45,6 +45,14 @@ def post(request, post_id=None):
 
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
+@require_http_methods(["GET"])
+def posts(request, start, count):
+    start = int(start)
+    count = int(count)
+    posts = Post.objects.all()[start:start + count]
+    return JsonResponse({'posts': [post.as_json() for post in posts], 'hasMore': len(posts) == count}, safe=False)
+
+
 @require_http_methods(["GET", "POST"])
 def post_comments(request, author_id, post_id):
     return JsonResponse(

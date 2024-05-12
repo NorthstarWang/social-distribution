@@ -11,12 +11,14 @@ interface InfiniteScrollPostProps {
   initialData: Post[];
   fetchData: () => void;
   hasMore: boolean;
+  page: number;
 }
 
 export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
   initialData,
   fetchData,
   hasMore,
+  page,
 }) => {
   const { isAuthenticated } = use(AuthContext);
   return (
@@ -28,7 +30,7 @@ export const InfiniteScrollPost: React.FC<InfiniteScrollPostProps> = ({
         {isAuthenticated && <CreatePost />}
         <InfiniteScroll
           className="max-w-screen-xl mx-auto"
-          dataLength={initialData.length}
+          dataLength={page}
           next={fetchData}
           hasMore={hasMore}
           loader={

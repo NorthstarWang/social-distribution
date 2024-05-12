@@ -2,56 +2,49 @@
 import { InfiniteScrollPost } from '@/components/post/infinite-scroll-post';
 import { Post } from '@/types/post';
 import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const pageSize = 5;
 
-  const fetchPosts = useCallback(async () => {
-    const newPosts: Post[] = await fetchMorePosts();
-    setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-    setHasMore(newPosts.length > 0);
-  }, []);
+  const fetchPosts = async () => {
+    const newPosts: Post[] = await fetchMorePosts(page, pageSize);
+    if (newPosts.length > 0) {
+      setPosts((prevPosts) => [...prevPosts, ...newPosts]);
+      setPage(prevPage => prevPage + pageSize);
+    }
+  };
+
+  async function fetchMorePosts(page: number, pageSize: number): Promise<Post[]> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/${page}/${pageSize}/`);
+    if (!response.ok) {
+      toast.error('Failed to fetch posts');
+      return [];
+    }
+    const data = await response.json();
+    console.log(data);
+    setHasMore(data.hasMore);
+    return data.posts;
+  }
+
+  const fetchInitialPosts = async () => {
+    const newPosts: Post[] = await fetchMorePosts(page, pageSize);
+    setPosts(newPosts);
+    setPage(pageSize);
+  };
 
   useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
-
-  async function fetchMorePosts(): Promise<Post[]> {
-    return new Promise((resolve) => {
-        const newPosts: Post[] = [];
-        for (let i = 0; i < 4; i++) {
-          const uniqueId = `post-${new Date().getTime()}-${Math.floor(Math.random() * 10000)}`;
-          newPosts.push({
-            id: `post-${uniqueId}`,
-            title: `Post ${uniqueId}`,
-            description: 'This is a post description.',
-            content: 'This is a simulated post content. It contains details about the post.',
-            contentType: 'text/markdown',
-            source: 'https://source.example.com',
-            origin: 'https://origin.example.com',
-            published: new Date(),
-            visibility: 'PUBLIC',
-            count: Math.floor(Math.random() * 100),
-            author: {
-              id: `author-${uniqueId}`,
-              host: 'https://host.example.com',
-              displayName: `Author ${uniqueId}`,
-              github: 'https://github.com/example',
-              profileImage: 'https://example.com/profile-image.png',
-              username: `author-${uniqueId}`,
-              bio: 'This is a simulated author bio.',
-            },
-          });
-        }
-        resolve(newPosts);
-    });
-  }
+    fetchInitialPosts();
+  }, []);
 
   return (
     <InfiniteScrollPost
       initialData={posts}
       fetchData={fetchPosts}
+      page={page}
       hasMore={hasMore}
     />
   );

@@ -84,6 +84,7 @@ export function CreatePost() {
         imageUrl = data.secure_url;
       }
     } catch (error) {
+      console.error(error);
       toast.error("Error uploading image to Cloudinary");
     } finally {
       setIsLoading(false);

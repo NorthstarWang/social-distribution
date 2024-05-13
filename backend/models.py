@@ -105,19 +105,6 @@ class CommentLike(models.Model):
         }
 
 
-class Image(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    image = cloudinary.models.CloudinaryField('image')
-    post = models.ForeignKey(Post, related_name='images', on_delete=models.CASCADE)
-
-    def as_json(self):
-        return {
-            "id": self.id,
-            "image_url": self.image.url,  # Assuming you want to return the URL of the image
-            "post_id": self.post.id,
-        }
-
-
 class Follow(models.Model):
     follower = models.ForeignKey(Author, related_name='following', on_delete=models.CASCADE)
     following = models.ForeignKey(Author, related_name='followers', on_delete=models.CASCADE)

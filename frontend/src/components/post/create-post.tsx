@@ -84,7 +84,6 @@ export function CreatePost() {
         imageUrl = data.secure_url;
       }
     } catch (error) {
-      console.error(error);
       toast.error("Error uploading image to Cloudinary");
     } finally {
       setIsLoading(false);
@@ -188,7 +187,7 @@ export function CreatePost() {
               className={`flex flex-col space-y-4 ${
                 lessHeight
                   ? "h-[calc(100vh-6rem)] md:h-[calc(100vh-8rem)]"
-                  : "h-[calc(100vh-12rem)] md:h-[calc(100vh-20rem)]"
+                  : "h-[calc(100vh-12rem)] md:h-[calc(100vh-16rem)]"
               }`}
             >
               <div className="grid w-full max-w-sm items-center px-4 md:px-0 gap-1.5">

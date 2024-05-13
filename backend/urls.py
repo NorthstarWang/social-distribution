@@ -37,5 +37,7 @@ urlpatterns = [
     # index view
     path('', views.index),
     # authentication view
-    path('authentication/', auth_view),
+    path('authentication', auth_view),
+    # browse view
+    path('browse/post', browse_post_view),
 ]

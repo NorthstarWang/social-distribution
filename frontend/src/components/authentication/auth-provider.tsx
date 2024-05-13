@@ -7,6 +7,7 @@ import { AuthResponse } from '@/types/auth';
 import { useRouter, usePathname } from "next/navigation";
 import { Progress } from "@/components/ui/progress"
 import path from 'path';
+import { toast } from 'sonner';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -46,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }, 300);
       })
       .catch((error) => {
-        console.error("Error checking login status", error);
+        toast.error("Error checking login status", error);
       });
   }, [isAuthenticated, setIsAuthenticated, setAuthor, router, pathname]);
 

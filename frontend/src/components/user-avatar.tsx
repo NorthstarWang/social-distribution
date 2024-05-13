@@ -34,7 +34,7 @@ export function UserAvatar({
   };
   if (dropdown === false) {
     return (
-      <Link href={`/profile/${author.username}`}>
+      <Link href="#">
         <Avatar className={dimensionStyles}>
           <AvatarImage src={author.profileImage} alt={author.displayName} />
           <AvatarFallback>PFP</AvatarFallback>

@@ -25,7 +25,6 @@ const BrowsePost = () => {
       return [];
     }
     const data = await response.json();
-    console.log(data);
     setHasMore(data.hasMore);
     return data.posts;
   }

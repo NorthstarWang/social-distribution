@@ -18,6 +18,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/out/_next/static'),
 ] if not SERVE_FRONTEND else []
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE =  'django.contrib.staticfiles.storage.StaticFilesStorage' 
 
 SECRET_KEY = 'django-insecure-ksaalir^q7i4w0a0*@3g-ujs9tb!nx$=g5o8@fcpu&7y($v$2%'
 

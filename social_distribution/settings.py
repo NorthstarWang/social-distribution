@@ -7,7 +7,7 @@ import cloudinary.api
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 # SECURITY WARNING: don't run with debug turned on in production!
-SERVE_FRONTEND = False  # Set to 'True' for development
+SERVE_FRONTEND = os.environ.get('SERVE_FRONTEND', 'False') == 'True' # Set to 'True' for development
 LOCAL = os.environ.get('DJANGO_LOCAL', 'False') == 'True'  # Set to 'True' for local development
 
 BASE_DIR = Path(__file__).resolve().parent.parent

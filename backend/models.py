@@ -108,11 +108,9 @@ class CommentLike(models.Model):
 class Follow(models.Model):
     follower = models.ForeignKey(Author, related_name='following', on_delete=models.CASCADE)
     following = models.ForeignKey(Author, related_name='followers', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def as_json(self):
         return {
             "follower": self.follower.as_json(),
             "following": self.following.as_json(),
-            "created_at": self.created_at.isoformat(),
         }

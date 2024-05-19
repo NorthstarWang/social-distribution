@@ -14,7 +14,9 @@ urlpatterns = [
     # posts api
     path('service/authors/<str:author_id>/posts/', author_posts, name='author_posts'),
     path('service/post/', post, name='post'),
-    path('service/posts/<int:start>/<int:count>/', posts, name='posts'),
+    path('service/posts/<str:post_id>/<int:count>/', posts, name='posts'),
+    path('service/posts/latest/', get_latest_post, name='get_latest_post'),
+    path('service/posts/latest/<str:attribute>/', get_latest_post, name='get_latest_post_with_attribute'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/', post_comments, name='post_comments'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/likes/', post_likes, name='post_likes'),
     # comments api
@@ -22,10 +24,6 @@ urlpatterns = [
          name='comment_detail'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/<str:comment_id>/likes/', comment_likes,
          name='comment_likes'),
-    # liked api
-    path('service/authors/<str:author_id>/liked/', author_liked, name='author_liked'),
-    # inbox api
-    path('service/authors/<str:author_id>/inbox/', author_inbox, name='author_inbox'),
     # auth api
     path('auth/check-login/', check_user_login_status, name='check_user_login_status'),
     path('auth/github/callback/', github_callback, name='github_callback'),

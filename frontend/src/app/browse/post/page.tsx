@@ -1,49 +1,74 @@
 "use client";
 import { InfiniteScrollPost } from '@/components/post/infinite-scroll-post';
 import { Post } from '@/types/post';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(0);
+  const [lastPostId, setLastPostId] = useState<string | null>(null);
   const pageSize = 5;
 
   const fetchPosts = async () => {
-    const newPosts: Post[] = await fetchMorePosts(page, pageSize);
+    const newPosts: Post[] = await fetchMorePosts(lastPostId, pageSize);
     if (newPosts.length > 0) {
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setPage(prevPage => prevPage + pageSize);
+      setLastPostId(newPosts[newPosts.length - 1]?.id ?? null);
     }
   };
 
-  async function fetchMorePosts(page: number, pageSize: number): Promise<Post[]> {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/${page}/${pageSize}/`);
+  async function fetchMorePosts(postId: string | null, count: number): Promise<Post[]> {
+    const endpoint = postId ? `${postId}` : '0';
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/${endpoint}/${count}/`);
     if (!response.ok) {
-      toast.error('Failed to fetch posts');
+      const data = await response.json();
+      toast.error(data.error);
       return [];
     }
     const data = await response.json();
-    setHasMore(data.hasMore);
+    setHasMore(!data.reach_end);
     return data.posts;
   }
 
   const fetchInitialPosts = async () => {
-    const newPosts: Post[] = await fetchMorePosts(page, pageSize);
+    const newPosts: Post[] = await fetchMorePosts(null, pageSize);
     setPosts(newPosts);
-    setPage(pageSize);
+    if (newPosts.length > 0) {
+      setLastPostId(newPosts[newPosts.length - 1]?.id ?? null);
+    }
   };
+
+  const fetchLatestPostId = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/latest/id/`);
+    if (!response.ok) {
+      const data = await response.json();
+      toast.error(data.error);
+      return null;
+    }
+    const data = await response.json();
+    if (!data.post_attribute){
+      return null;
+    }
+    return data.post_attribute;
+  };
+
+  const interval = setInterval(async () => {
+    const newLatestPostId = await fetchLatestPostId();
+    if (newLatestPostId && posts.length > 0 && newLatestPostId !== posts[0].id) {
+      toast.info('New posts are available');
+    }
+  }, 5000);
 
   useEffect(() => {
     fetchInitialPosts();
+    clearInterval(interval);
   }, []);
 
   return (
     <InfiniteScrollPost
       initialData={posts}
       fetchData={fetchPosts}
-      page={page}
       hasMore={hasMore}
     />
   );

@@ -96,12 +96,12 @@ def get_latest_post(request, attribute=None):
     user = request.user if request.user.is_authenticated else None
 
     if user is None:
-        latest_post = Post.objects.filter(visibility='PUBLIC').order_by('-created').first()
+        latest_post = Post.objects.filter(visibility='public').order_by('-created').first()
     else:
         friends = get_user_friends(user)
         latest_post = Post.objects.filter(
-            Q(visibility='PUBLIC') | 
-            (Q(visibility='UNLISTED') & Q(author__in=friends))
+            Q(visibility='public') | 
+            (Q(visibility='unlisted') & Q(author__in=friends))
         ).order_by('-created').first()
 
     if latest_post:

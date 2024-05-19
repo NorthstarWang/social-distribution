@@ -1,13 +1,14 @@
 "use client";
 import { InfiniteScrollPost } from '@/components/post/infinite-scroll-post';
 import { Post } from '@/types/post';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [lastPostId, setLastPostId] = useState<string | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pageSize = 5;
 
   const fetchPosts = async () => {
@@ -53,17 +54,27 @@ const BrowsePost = () => {
     return data.post_attribute;
   };
 
-  const interval = setInterval(async () => {
+  const checkForNewPosts = async () => {
     const newLatestPostId = await fetchLatestPostId();
     if (newLatestPostId && posts.length > 0 && newLatestPostId !== posts[0].id) {
       toast.info('New posts are available');
     }
-  }, 5000);
+  };
 
   useEffect(() => {
     fetchInitialPosts();
-    clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    
+    intervalRef.current = setInterval(checkForNewPosts, 5000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [posts]);
 
   return (
     <InfiniteScrollPost

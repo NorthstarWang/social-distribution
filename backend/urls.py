@@ -14,9 +14,10 @@ urlpatterns = [
     # posts api
     path('service/authors/<str:author_id>/posts/', author_posts, name='author_posts'),
     path('service/post/', post, name='post'),
+    path('service/post/latest/<str:attribute>/', get_latest_post, name='get_latest_post_with_attribute'),
     path('service/posts/<str:post_id>/<int:count>/', posts, name='posts'),
     path('service/posts/latest/', get_latest_post, name='get_latest_post'),
-    path('service/posts/latest/<str:attribute>/', get_latest_post, name='get_latest_post_with_attribute'),
+    path('service/posts/latest/<str:timestamp>/', get_latest_posts, name='get_latest_posts'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/', post_comments, name='post_comments'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/likes/', post_likes, name='post_likes'),
     # comments api

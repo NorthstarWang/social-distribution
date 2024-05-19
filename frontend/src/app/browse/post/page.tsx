@@ -41,7 +41,7 @@ const BrowsePost = () => {
   };
 
   const fetchLatestPostId = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/latest/id/`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/post/latest/id/`);
     if (!response.ok) {
       const data = await response.json();
       toast.error(data.error);
@@ -54,10 +54,26 @@ const BrowsePost = () => {
     return data.post_attribute;
   };
 
+  
+  const fetchNewPosts = async (timestamp: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/latest/${timestamp}/`);
+    if (!response.ok) {
+      const data = await response.json();
+      toast.error(data.error);
+      return [];
+    }
+    const data = await response.json();
+    return data.posts;
+  };
+
   const checkForNewPosts = async () => {
     const newLatestPostId = await fetchLatestPostId();
     if (newLatestPostId && posts.length > 0 && newLatestPostId !== posts[0].id) {
-      toast.info('New posts are available');
+      const latestTimestamp = posts[0].created;
+      const newPosts = await fetchNewPosts(latestTimestamp);
+      if (newPosts.length > 0) {
+        setPosts((prevPosts) => [...newPosts, ...prevPosts]);
+      }
     }
   };
 

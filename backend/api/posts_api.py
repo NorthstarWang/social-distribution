@@ -7,6 +7,7 @@ from backend.api.follow_api import get_user_friends
 from backend.decorators import require_authenticated_non_get
 from django.db.models import Q
 from backend.models import Post
+from django.utils.dateparse import parse_datetime
 
 
 @require_http_methods(["GET"])
@@ -89,6 +90,29 @@ def posts(request, post_id, count):
         'posts': [post.as_json() for post in posts_list],
         'reach_end': reach_end
     }, safe=False)
+
+
+@require_http_methods(["GET"])
+def get_latest_posts(request, timestamp):
+    try:
+        timestamp = parse_datetime(timestamp)
+        if timestamp is None:
+            return JsonResponse({'error': 'Invalid timestamp format'}, status=400)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid timestamp'}, status=400)
+
+    user = request.user if request.user.is_authenticated else None
+    
+    if user is None:
+        posts_list = Post.objects.filter(visibility='public', created__gt=timestamp).order_by('-created')
+    else:
+        friends = get_user_friends(user)
+        posts_list = Post.objects.filter(
+            Q(visibility='public') | 
+            (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
+        ).filter(created__gt=timestamp).order_by('-created')
+    
+    return JsonResponse({'posts': [post.as_json() for post in posts_list]}, safe=False)
 
 
 @require_http_methods(["GET"])

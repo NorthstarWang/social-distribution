@@ -3,7 +3,7 @@ from django.views.decorators.http import require_http_methods
 
 
 @require_http_methods(["GET", "PUT", "DELETE"])
-def comment_detail(request, author_id, post_id, comment_id):
+def comment_detail(request, comment_id):
     return JsonResponse(
         {'message': f'Getting, updating, or deleting comment {comment_id} of post {post_id} of author {author_id}'})
 

@@ -6,4 +6,5 @@ export interface Author {
     profileImage: string;
     username: string;
     bio?: string;
+    email?: string;
 }

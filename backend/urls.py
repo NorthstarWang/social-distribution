@@ -19,7 +19,9 @@ urlpatterns = [
     path('service/posts/latest/', get_latest_post, name='get_latest_post'),
     path('service/posts/latest/<str:timestamp>/', get_latest_posts, name='get_latest_posts'),
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/', post_comments, name='post_comments'),
-    path('service/authors/<str:author_id>/posts/<str:post_id>/likes/', post_likes, name='post_likes'),
+    path('service/post/like/', like_post, name='like_post'),
+    path('service/post/like/<str:post_id>/', like_post, name='like_post_with_id'),
+    path('service/post/likes/<str:post_id>/', post_likes, name='post_likes'),
     # comments api
     path('service/authors/<str:author_id>/posts/<str:post_id>/comments/<str:comment_id>/', comment_detail,
          name='comment_detail'),

@@ -29,7 +29,13 @@ import {
   Text,
 } from "@radix-ui/themes";
 import { Separator } from "@/components/ui/separator";
-import { useLayoutEffect, useRef, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Post } from "@/types/post";
 import { Author } from "@/types/author";
 import { CommentSection } from "@/components/post/comment-section";
@@ -42,17 +48,22 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { CustomMarkdown } from "@/components/custom-markdown";
+import { toast } from "sonner";
+import { AuthContext } from "@/components/context/authContext";
 
 type CardProps = React.ComponentProps<typeof Card> & {
   post: Post;
 };
 
 export function PostCard({ className, post, ...props }: CardProps) {
+  const { isAuthenticated } = useContext(AuthContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+  const [likes, setLikes] = useState<number>(0);
+  const [liked, setLiked] = useState<boolean>(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -77,6 +88,76 @@ export function PostCard({ className, post, ...props }: CardProps) {
       }
     };
   }, []);
+
+  useEffect(() => {
+    fetchLikes();
+    if (isAuthenticated) fetchLikeStatus();
+  }, []);
+
+  const fetchLikes = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/service/post/likes/${post.id}/`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setLikes(data.total_likes);
+    } else {
+      toast.error("Failed to fetch likes");
+    }
+  };
+
+  const fetchLikeStatus = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/service/post/like/${post.id}/`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        toast.error(data.error);
+        return;
+      }
+      setLiked(data.liked);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to fetch like status");
+    }
+  };
+
+  const handleLike = async () => {
+    try {
+      const payload = {
+        post_id: post.id,
+      };
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/service/post/like/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        fetchLikes();
+        setLiked(data.liked);
+        toast.success(data.message);
+      } else {
+        const data = await response.json();
+        toast.error(data.error);
+      }
+    } catch (error) {
+      toast.error("Failed to like post");
+    }
+  };
 
   const handleCopyToClipboard = () => {
     const input = inputRef.current;
@@ -151,20 +232,27 @@ export function PostCard({ className, post, ...props }: CardProps) {
       )}
       <CardFooter className="flex flex-col space-y-2 pb-2">
         <div className="flex justify-between w-full">
-          <CardDescription>5,646 likes</CardDescription>
+          <CardDescription>{likes} likes</CardDescription>
           <CardDescription className="flex justify-end">
-            {post.count} comments
+            comments
           </CardDescription>
         </div>
         <Separator />
         <div className="flex justify-between w-full">
-          <Button
-            variant="link"
-            className="flex items-center justify-center gap-1 p-0"
-          >
-            <HeartIcon className="h-4 w-4" />
-            Like
-          </Button>
+          {isAuthenticated && (
+            <Button
+              variant="link"
+              className="flex items-center justify-center gap-1 p-0"
+              onClick={handleLike}
+            >
+              {liked ? (
+                <HeartFilledIcon className="h-4 w-4" />
+              ) : (
+                <HeartIcon className="h-4 w-4" />
+              )}
+              Like
+            </Button>
+          )}
           <Button
             variant="link"
             className="flex items-center justify-center gap-1 p-0"

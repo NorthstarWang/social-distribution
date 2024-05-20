@@ -63,16 +63,10 @@ def posts(request, timestamp, count):
         posts_list = Post.objects.filter(visibility='public', created__lt=start_timestamp).order_by('-created')[:count]
     else:
         friends = get_user_friends(user)
-        if start_timestamp:
-            posts_list = Post.objects.filter(
-                Q(visibility='public') |
-                (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
-            ).filter(created__gt=start_timestamp).order_by('-created')[:count]
-        else:
-            posts_list = Post.objects.filter(
-                Q(visibility='public') |
-                (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
-            ).order_by('-created')[:count]
+        posts_list = Post.objects.filter(
+            Q(visibility='public') |
+            (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
+        ).filter(created__lt=start_timestamp).order_by('-created')[:count]
 
     reach_end = len(posts_list) < count
 

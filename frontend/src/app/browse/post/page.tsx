@@ -7,20 +7,18 @@ import { toast } from 'sonner';
 const BrowsePost = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [lastPostId, setLastPostId] = useState<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const pageSize = 5;
 
   const fetchPosts = async () => {
-    const newPosts: Post[] = await fetchMorePosts(lastPostId, pageSize);
+    const newPosts: Post[] = await fetchMorePosts(posts.length>0?posts[posts.length-1].created:null, pageSize);
     if (newPosts.length > 0) {
       setPosts((prevPosts) => [...prevPosts, ...newPosts]);
-      setLastPostId(newPosts[newPosts.length - 1]?.id ?? null);
     }
   };
 
-  async function fetchMorePosts(postId: string | null, count: number): Promise<Post[]> {
-    const endpoint = postId ? `${postId}` : '0';
+  async function fetchMorePosts(timestamp: string | null, count: number): Promise<Post[]> {
+    const endpoint = timestamp || new Date().toISOString();
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/posts/${endpoint}/${count}/`);
     if (!response.ok) {
       const data = await response.json();
@@ -35,13 +33,10 @@ const BrowsePost = () => {
   const fetchInitialPosts = async () => {
     const newPosts: Post[] = await fetchMorePosts(null, pageSize);
     setPosts(newPosts);
-    if (newPosts.length > 0) {
-      setLastPostId(newPosts[newPosts.length - 1]?.id ?? null);
-    }
   };
 
-  const fetchLatestPostId = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/post/latest/id/`);
+  const fetchLatestPostCreated = async () => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/service/post/latest/created/`);
     if (!response.ok) {
       const data = await response.json();
       toast.error(data.error);
@@ -67,8 +62,8 @@ const BrowsePost = () => {
   };
 
   const checkForNewPosts = async () => {
-    const newLatestPostId = await fetchLatestPostId();
-    if (newLatestPostId && posts.length > 0 && newLatestPostId !== posts[0].id) {
+    const newLatestPostTimestamp = await fetchLatestPostCreated();
+    if (newLatestPostTimestamp && posts.length > 0 && newLatestPostTimestamp > posts[0].created) {
       const latestTimestamp = posts[0].created;
       const newPosts = await fetchNewPosts(latestTimestamp);
       if (newPosts.length > 0) {

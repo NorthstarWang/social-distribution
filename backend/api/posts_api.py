@@ -48,37 +48,24 @@ def post(request, post_id=None):
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
 @require_http_methods(["GET"])
-def posts(request, post_id, count):
+def posts(request, timestamp, count):
     count = int(count)
 
     posts_list = []
     user = request.user if request.user.is_authenticated else None
     
-    if str(post_id) != '0':
-        try:
-            # Get the post corresponding to the post_id to find its timestamp
-            starting_post = Post.objects.get(pk=post_id)
-            start_timestamp = starting_post.created
-        except Post.DoesNotExist:
-            return JsonResponse({'error': 'Invalid post id'}, status=400)
-    else:
-        start_timestamp = None
+    start_timestamp = parse_datetime(timestamp)
     
     if user is None:
-        if start_timestamp:
-            posts_list = Post.objects.filter(visibility='public', created__lt=start_timestamp).order_by('-created')[:count]
-        else:
-            posts_list = Post.objects.filter(visibility='public').order_by('-created')[:count]
+        posts_list = Post.objects.filter(visibility='public', created__lt=start_timestamp).order_by('-created')[:count]
     else:
         friends = get_user_friends(user)
         if start_timestamp:
-            # Fetch public posts or unlisted posts by friends created after the start timestamp
             posts_list = Post.objects.filter(
                 Q(visibility='public') | 
                 (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
             ).filter(created__gt=start_timestamp).order_by('-created')[:count]
         else:
-            # Fetch the latest public posts or unlisted posts by friends
             posts_list = Post.objects.filter(
                 Q(visibility='public') | 
                 (Q(visibility='unlisted') & Q(author__in=friends) | Q(author=user))
